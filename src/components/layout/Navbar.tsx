@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="sticky top-0 z-50 backdrop-blur-xl bg-black/40 border-b border-white/10 mb-5">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-indigo-600">
@@ -11,25 +11,37 @@ const Navbar = () => {
         {/* Menu */}
         <ul className="hidden md:flex gap-8 font-medium text-gray-700">
           <li>
-            <Link to="/" className="hover:text-indigo-600">
+            <Link
+              to="/"
+              className="hidden md:block text-sm font-medium text-gray-300 hover:text-white transition"
+            >
               Home
             </Link>
           </li>
 
           <li>
-            <Link to="/products" className="hover:text-indigo-600">
+            <Link
+              to="/products"
+              className="hidden md:block text-sm font-medium text-gray-300 hover:text-white transition"
+            >
               Products
             </Link>
           </li>
 
           <li>
-            <Link to="/categories" className="hover:text-indigo-600">
+            <Link
+              to="/categories"
+              className="hidden md:block text-sm font-medium text-gray-300 hover:text-white transition"
+            >
               Categories
             </Link>
           </li>
 
           <li>
-            <Link to="/contact" className="hover:text-indigo-600">
+            <Link
+              to="/contact"
+              className="hidden md:block text-sm font-medium text-gray-300 hover:text-white transition"
+            >
               Contact
             </Link>
           </li>
@@ -40,8 +52,8 @@ const Navbar = () => {
           {/* Search */}
           <input
             type="text"
-            placeholder="Search..."
-            className="hidden md:block border rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Search products..."
+            className="w-full rounded-xl bg-white/10 border border-white/10 px-4 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
 
           {/* Cart */}

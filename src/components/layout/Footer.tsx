@@ -1,8 +1,6 @@
-import React from "react";
-
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 mt-16">
+    <footer className=" mt-16 border-t border-white/10 text-sm text-gray-400">
       <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Brand */}
         <div>
@@ -45,7 +43,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="text-center text-sm border-t border-gray-700 py-4">
+      <div className="text-center text-sm border-t border-white/10 py-4">
         © 2026 ShopZone. All rights reserved.
       </div>
     </footer>

@@ -6,28 +6,54 @@ type Props = {
 
 const ProductCard = ({ product }: Props) => {
   return (
-    <div className="max-w-sm bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden group">
-      <div className="relative bg-gray-100 p-6 flex justify-center">
-        <span className="absolute top-3 left-3 bg-red-500 text-white text-xs px-3 py-1 rounded-full">
-          SALE
+    <div className="group relative rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-indigo-500/40 transition-all duration-300 hover:-translate-y-3">
+      {/* FEATURED BADGE */}
+      {product.isFeatured && (
+        <span className="absolute top-4 left-4 z-10 bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+          FEATURED
         </span>
+      )}
 
-        <img
-          src={product.image}
-          alt={product.name}
-          className="h-40 object-contain group-hover:scale-110 transition duration-300"
-        />
+      {/* IMAGE */}
+      <div className="h-48 rounded-t-2xl bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700  flex items-center justify-center">
+        <span className="text-gray-400 text-sm tracking-widest">IMAGE</span>
       </div>
 
-      <div className="p-5 space-y-2">
-        <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
+      {/* CONTENT */}
+      <div className="p-5 text-white">
+        <h3 className="text-lg font-bold truncate">{product.name}</h3>
 
-        <p className="text-gray-500 text-sm">{product.description}</p>
+        <p className="text-sm text-gray-300 capitalize">{product.category}</p>
 
-        <p className="text-xl font-bold text-gray-900">₱{product.price}</p>
+        {/* RATING */}
+        <div className="flex items-center gap-1 mt-2">
+          <span className="text-yellow-400">★</span>
+          <span className="text-sm font-medium">{product.rating}</span>
+        </div>
 
-        <button className="w-full mt-3 bg-linear-to-r from-indigo-500 to-purple-600 text-white py-2 rounded-lg font-medium hover:opacity-90 transition">
-          🛒 Add to Cart
+        {/* PRICE + STOCK */}
+        <div className="mt-4 flex items-center justify-between">
+          <span className="text-2xl font-extrabold text-indigo-400">
+            ₱{product.price.toLocaleString()}
+          </span>
+
+          <span
+            className={`text-xs font-semibold px-2 py-1 rounded-full ${
+              product.stock > 0
+                ? "bg-green-500/20 text-green-400"
+                : "bg-red-500/20 text-red-400"
+            }`}
+          >
+            {product.stock > 0 ? "In Stock" : "Out of Stock"}
+          </span>
+        </div>
+
+        {/* CTA */}
+        <button
+          disabled={product.stock === 0}
+          className="mt-5 w-full rounded-xl bg-indigo-600 py-3 font-bold tracking-wide hover:bg-indigo-500 transition disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          Add to Cart
         </button>
       </div>
     </div>
