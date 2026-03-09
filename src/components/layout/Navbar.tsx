@@ -1,16 +1,38 @@
+import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <h1 className="text-2xl font-bold text-indigo-600">ShopZone</h1>
+        <Link to="/" className="text-2xl font-bold text-indigo-600">
+          ShopZone
+        </Link>
 
         {/* Menu */}
         <ul className="hidden md:flex gap-8 font-medium text-gray-700">
-          <li className="hover:text-indigo-600 cursor-pointer">Home</li>
-          <li className="hover:text-indigo-600 cursor-pointer">Products</li>
-          <li className="hover:text-indigo-600 cursor-pointer">Categories</li>
-          <li className="hover:text-indigo-600 cursor-pointer">Contact</li>
+          <li>
+            <Link to="/" className="hover:text-indigo-600">
+              Home
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/products" className="hover:text-indigo-600">
+              Products
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/categories" className="hover:text-indigo-600">
+              Categories
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/contact" className="hover:text-indigo-600">
+              Contact
+            </Link>
+          </li>
         </ul>
 
         {/* Right Side */}
@@ -31,9 +53,12 @@ const Navbar = () => {
           </button>
 
           {/* Login */}
-          <button className="bg-indigo-600 text-white px-4 py-1.5 rounded-lg hover:bg-indigo-700 transition">
+          <Link
+            to="/login"
+            className="bg-indigo-600 text-white px-4 py-1.5 rounded-lg hover:bg-indigo-700 transition"
+          >
             Login
-          </button>
+          </Link>
         </div>
       </div>
     </nav>

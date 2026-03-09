@@ -26,7 +26,7 @@ const ProductCard = ({ product }: Props) => {
 
         <p className="text-xl font-bold text-gray-900">₱{product.price}</p>
 
-        <button className="w-full mt-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-2 rounded-lg font-medium hover:opacity-90 transition">
+        <button className="w-full mt-3 bg-linear-to-r from-indigo-500 to-purple-600 text-white py-2 rounded-lg font-medium hover:opacity-90 transition">
           🛒 Add to Cart
         </button>
       </div>
