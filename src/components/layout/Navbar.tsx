@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-const Navbar = () => {
+import Cart from "../ui/Cart";
+import type { CartItem } from "../../types/product";
+const Navbar = ({ cartItems }: CartItem) => {
   return (
     <nav className="sticky top-0 z-50 backdrop-blur-xl bg-black/40 border-b border-white/10 mb-5">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -73,6 +75,7 @@ const Navbar = () => {
           </Link>
         </div>
       </div>
+      <Cart cartItems={cartItems} />
     </nav>
   );
 };

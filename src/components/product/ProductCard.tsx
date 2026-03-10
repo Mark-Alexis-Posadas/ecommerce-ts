@@ -2,9 +2,10 @@ import type { Product } from "../../types/product";
 
 type Props = {
   product: Product;
+  handleAddToCart: (product: Product) => void;
 };
 
-const ProductCard = ({ product }: Props) => {
+const ProductCard = ({ product, handleAddToCart }: Props) => {
   return (
     <div className="group relative rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-indigo-500/40 transition-all duration-300 hover:-translate-y-3">
       {/* FEATURED BADGE */}
@@ -15,7 +16,7 @@ const ProductCard = ({ product }: Props) => {
       )}
 
       {/* IMAGE */}
-      <div className="h-48 rounded-t-2xl bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700  flex items-center justify-center">
+      <div className="h-48 rounded-t-2xl bg-linear-to-r from-gray-700 via-gray-600 to-gray-700  flex items-center justify-center">
         <span className="text-gray-400 text-sm tracking-widest">IMAGE</span>
       </div>
 
@@ -50,6 +51,7 @@ const ProductCard = ({ product }: Props) => {
 
         {/* CTA */}
         <button
+          onClick={() => handleAddToCart(product)}
           disabled={product.stock === 0}
           className="mt-5 w-full rounded-xl bg-indigo-600 py-3 font-bold tracking-wide hover:bg-indigo-500 transition disabled:opacity-40 disabled:cursor-not-allowed"
         >

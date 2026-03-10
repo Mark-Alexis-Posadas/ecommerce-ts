@@ -8,6 +8,9 @@ export const products: Product[] = [
     category: "Shoes",
     image: "/images/shoe1.jpg",
     description: "Comfortable running shoes",
+    rating: 4.7,
+    stock: 12,
+    isFeatured: true,
   },
   {
     id: 2,
@@ -16,6 +19,9 @@ export const products: Product[] = [
     category: "Shoes",
     image: "/images/shoe2.jpg",
     description: "High performance running shoe",
+    rating: 4.8,
+    stock: 8,
+    isFeatured: true,
   },
   {
     id: 3,
@@ -24,6 +30,8 @@ export const products: Product[] = [
     category: "Clothing",
     image: "/images/shirt1.jpg",
     description: "Minimalist casual shirt",
+    rating: 4.4,
+    stock: 20,
   },
   {
     id: 4,
@@ -32,5 +40,8 @@ export const products: Product[] = [
     category: "Electronics",
     image: "/images/airpods.jpg",
     description: "Noise cancelling earbuds",
+    rating: 4.9,
+    stock: 5,
+    isFeatured: true,
   },
 ];

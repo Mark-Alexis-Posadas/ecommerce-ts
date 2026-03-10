@@ -8,7 +8,7 @@ import CategoriesSection from "../components/home-page/CategoriesSection";
 import ValueProps from "../components/home-page/ValueProps";
 import PromoBanner from "../components/home-page/PromoBanner";
 
-const HomePage = () => {
+const HomePage = ({ handleAddToCart }) => {
   return (
     <>
       <HeroSection />
@@ -21,7 +21,11 @@ const HomePage = () => {
           <h1>Products</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                handleAddToCart={handleAddToCart}
+              />
             ))}
           </div>
         </Container>

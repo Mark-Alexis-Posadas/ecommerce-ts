@@ -5,4 +5,11 @@ export type Product = {
   category: string;
   image: string;
   description: string;
+  rating: number;
+  stock: number;
+  isFeatured?: boolean;
+};
+
+export type CartItem = Product & {
+  quantity: number;
 };
