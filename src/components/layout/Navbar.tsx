@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 import Cart from "../ui/Cart";
 import type { CartItem } from "../../types/product";
-const Navbar = ({ cartItems }: CartItem) => {
+import { useState } from "react";
+
+type NavbarProps = {
+  cartItems: CartItem[];
+};
+const Navbar = ({ cartItems }: NavbarProps) => {
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   return (
     <nav className="sticky top-0 z-50 backdrop-blur-xl bg-black/40 border-b border-white/10 mb-5">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -59,7 +65,10 @@ const Navbar = ({ cartItems }: CartItem) => {
           />
 
           {/* Cart */}
-          <button className="relative text-gray-700 hover:text-indigo-600">
+          <button
+            className="relative text-gray-700 hover:text-indigo-600"
+            onClick={() => setIsCartOpen(true)}
+          >
             🛒
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 rounded-full">
               2
@@ -75,7 +84,11 @@ const Navbar = ({ cartItems }: CartItem) => {
           </Link>
         </div>
       </div>
-      <Cart cartItems={cartItems} />
+      <Cart
+        cartItems={cartItems}
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+      />
     </nav>
   );
 };

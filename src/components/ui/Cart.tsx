@@ -1,7 +1,14 @@
-const Cart = ({ isOpen, onClose, cartItems }) => {
+import type { CartItem } from "../../types/product";
+
+type CartProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  cartItems: CartItem[];
+};
+const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
   return (
     <div
-      className={`fixed top-0 right-0 h-full w-[380px] bg-white shadow-lg z-50 transform transition-transform duration-300
+      className={`fixed top-0 right-0 h-full w-95 bg-white shadow-lg z-50 transform transition-transform duration-300
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
     >
       {/* Header */}
@@ -24,12 +31,12 @@ const Cart = ({ isOpen, onClose, cartItems }) => {
             <div key={item.id} className="flex gap-3 border-b pb-3">
               <img
                 src={item.image}
-                alt={item.title}
+                alt={item.name}
                 className="w-16 h-16 object-cover rounded"
               />
 
               <div className="flex flex-col flex-1">
-                <h3 className="text-sm font-medium">{item.title}</h3>
+                <h3 className="text-sm font-medium">{item.name}</h3>
                 <p className="text-sm text-gray-500">${item.price}</p>
               </div>
             </div>
