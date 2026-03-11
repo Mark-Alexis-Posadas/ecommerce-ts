@@ -6,9 +6,14 @@ type CartProps = {
   cartItems: CartItem[];
 };
 const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
+
   return (
     <div
-      className={`fixed top-0 right-0 h-full w-95 bg-white shadow-lg z-50 transform transition-transform duration-300
+      className={`fixed top-0 right-0 h-full w-[380px] bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg z-50 transform transition-transform duration-300
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
     >
       {/* Header */}
@@ -37,7 +42,13 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
 
               <div className="flex flex-col flex-1">
                 <h3 className="text-sm font-medium">{item.name}</h3>
-                <p className="text-sm text-gray-500">${item.price}</p>
+                <p className="text-sm text-gray-400">
+                  ${item.price} × {item.quantity}
+                </p>
+              </div>
+
+              <div className="text-sm text-indigo-400 font-semibold">
+                ${(item.price * item.quantity).toFixed(2)}
               </div>
             </div>
           ))
@@ -45,8 +56,15 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
       </div>
 
       {/* Footer */}
-      <div className="absolute bottom-0 w-full border-t p-4">
-        <button className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800">
+      <div className="absolute bottom-0 w-full border-t border-white/10 p-5">
+        <div className="flex justify-between mb-4 text-white">
+          <span>Total</span>
+          <span className="font-semibold text-indigo-400">
+            ${total.toFixed(2)}
+          </span>
+        </div>
+
+        <button className="w-full bg-indigo-600 py-3 rounded-xl font-semibold hover:bg-indigo-500 transition">
           Checkout
         </button>
       </div>
