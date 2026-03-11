@@ -13,11 +13,11 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
 
   return (
     <div
-      className={`fixed top-0 right-0 h-full w-[380px] bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg z-50 transform transition-transform duration-300
+      className={`fixed top-0 right-0 h-full w-[380px] bg-black/80 backdrop-blur-xl border-l border-white/10 shadow-2xl z-50 transform transition-transform duration-300
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
     >
       {/* Header */}
-      <div className="flex justify-between items-center border-b p-4">
+      <div className="flex justify-between items-center border-b border-white/10 p-4">
         <h2 className="text-lg font-semibold">Your Cart</h2>
         <button
           onClick={onClose}
@@ -33,7 +33,10 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
           <p className="text-gray-500 text-center mt-10">Your cart is empty</p>
         ) : (
           cartItems.map((item) => (
-            <div key={item.id} className="flex gap-3 border-b pb-3">
+            <div
+              key={item.id}
+              className="flex gap-3 border-b border-white/10 pb-3"
+            >
               <img
                 src={item.image}
                 alt={item.name}
