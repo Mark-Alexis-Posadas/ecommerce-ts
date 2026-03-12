@@ -5,6 +5,7 @@ type CartProps = {
   onClose: () => void;
   cartItems: CartItem[];
 };
+
 const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -39,12 +40,15 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
             >
               <img
                 src={item.image}
-                alt={item.name}
-                className="w-16 h-16 object-cover rounded"
+                alt={item.title}
+                className="w-16 h-16 object-contain rounded bg-white p-1"
               />
 
               <div className="flex flex-col flex-1">
-                <h3 className="text-sm font-medium">{item.name}</h3>
+                <h3 className="text-sm font-medium line-clamp-1">
+                  {item.title}
+                </h3>
+
                 <p className="text-sm text-gray-400">
                   ${item.price} × {item.quantity}
                 </p>

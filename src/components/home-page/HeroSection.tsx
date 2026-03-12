@@ -1,4 +1,4 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 const HeroSection: React.FC = () => {
   return (
@@ -13,12 +13,19 @@ const HeroSection: React.FC = () => {
       </p>
 
       <div className="flex justify-center gap-4">
-        <button className="px-8 py-4 rounded-xl bg-indigo-600 font-bold tracking-wide hover:bg-indigo-500 transition">
+        <Link
+          to="/products"
+          className="px-8 py-4 rounded-xl bg-indigo-600 font-bold tracking-wide hover:bg-indigo-500 transition"
+        >
           Shop Now
-        </button>
-        <button className="px-8 py-4 rounded-xl border border-white/20 text-gray-200 hover:bg-white/10 transition">
+        </Link>
+
+        <Link
+          to="/categories"
+          className="px-8 py-4 rounded-xl border border-white/20 text-gray-200 hover:bg-white/10 transition"
+        >
           Browse Categories
-        </button>
+        </Link>
       </div>
     </section>
   );

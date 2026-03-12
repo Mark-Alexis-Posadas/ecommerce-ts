@@ -1,13 +1,16 @@
+export type Rating = {
+  rate: number;
+  count: number;
+};
+
 export type Product = {
   id: number;
-  name: string;
+  title: string;
   price: number;
   category: string;
   image: string;
   description: string;
-  rating: number;
-  stock: number;
-  isFeatured?: boolean;
+  rating: Rating;
 };
 
 export type CartItem = Product & {
