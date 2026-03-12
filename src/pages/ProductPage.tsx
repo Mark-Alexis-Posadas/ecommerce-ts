@@ -1,20 +1,35 @@
 import { products } from "../data/products";
 import ProductCard from "../components/product/ProductCard";
-import { useState } from "react";
-
-const ProductPage = () => {
+import { useMemo, useState } from "react";
+import type { Product } from "../types/product";
+type CartType = {
+  handleAddToCart: (product: Product) => void;
+};
+const ProductPage = ({ handleAddToCart }: CartType) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProduct, setFilteredProduct] = useState(products);
+
+  const [sortOption, setSortOption] = useState("none");
 
   const handleSearchProduct = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
-    const filteredItems = products.filter((product) =>
-      product.name.toLowerCase().includes(value.toLowerCase()),
+  };
+
+  const filteredProducts = useMemo(() => {
+    let items = products.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
-    setFilteredProduct(filteredItems);
-  };
+    if (sortOption === "low_to_high") {
+      items = [...items].sort((a, b) => a.price - b.price);
+    } else if (sortOption === "high_to_low") {
+      items = [...items].sort((a, b) => b.price - a.price);
+    } else if (sortOption === "top_rated") {
+      items = [...items].sort((a, b) => b.rating - a.rating);
+    }
+
+    return items;
+  }, [searchQuery, sortOption]);
 
   return (
     <section className="px-10 py-16 max-w-7xl mx-auto">
@@ -38,22 +53,26 @@ const ProductPage = () => {
         />
 
         {/* Sort */}
-        <select className="rounded-xl bg-white/10 border border-white/10 px-4 py-2 text-sm text-gray-300 focus:outline-none">
+        <select
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value)}
+          className="rounded-xl bg-white/10 border border-white/10 px-4 py-2 text-sm text-gray-300 focus:outline-none"
+        >
           <option>Sort by</option>
-          <option>Price: Low to High</option>
-          <option>Price: High to Low</option>
-          <option>Top Rated</option>
+          <option value="low_to_high">Price: Low to High</option>
+          <option value="high_to_low">Price: High to Low</option>
+          <option value="top_rated">Top Rated</option>
         </select>
       </div>
 
       {/* Product Grid */}
       {/* PRODUCT GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {filteredProduct.map((product) => (
+        {filteredProducts.map((product) => (
           <ProductCard
             key={product.id}
             product={product}
-            // handleAddToCart={handleAddToCart}
+            handleAddToCart={handleAddToCart}
           />
         ))}
       </div>

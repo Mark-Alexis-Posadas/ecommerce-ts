@@ -27,6 +27,7 @@ const App = () => {
       return [...prev, { ...product, quantity: 1 }];
     });
   };
+
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-900 via-black to-gray-900 text-white">
       <Navbar cartItems={cartItems} />
@@ -35,7 +36,10 @@ const App = () => {
           path="/"
           element={<HomePage handleAddToCart={handleAddToCart} />}
         />
-        <Route path="/products" element={<ProductPage />} />
+        <Route
+          path="/products"
+          element={<ProductPage handleAddToCart={handleAddToCart} />}
+        />
         <Route path="/categories" element={<Categories />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
