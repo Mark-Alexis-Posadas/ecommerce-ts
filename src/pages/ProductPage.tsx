@@ -1,5 +1,7 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
+import { useSearchParams, Link } from "react-router-dom";
 import ProductCard from "../components/product/ProductCard";
+import useProducts from "../hooks/useProducts";
 import type { Product } from "../types/product";
 
 type CartType = {
@@ -7,34 +9,31 @@ type CartType = {
 };
 
 const ProductPage = ({ handleAddToCart }: CartType) => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const { products, loading, error } = useProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("none");
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("https://fakestoreapi.com/products");
-        const data: Product[] = await response.json();
-
-        setProducts(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("category");
 
   const handleSearchProduct = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
   const filteredProducts = useMemo(() => {
-    let items = products.filter((product) =>
+    let items = products;
+
+    // filter by category
+    if (category) {
+      items = items.filter((product) => product.category === category);
+    }
+
+    // search
+    items = items.filter((product) =>
       product.title.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
+    // sorting
     if (sortOption === "low_to_high") {
       items = [...items].sort((a, b) => a.price - b.price);
     } else if (sortOption === "high_to_low") {
@@ -44,13 +43,36 @@ const ProductPage = ({ handleAddToCart }: CartType) => {
     }
 
     return items;
-  }, [products, searchQuery, sortOption]);
+  }, [products, searchQuery, sortOption, category]);
+
+  if (loading) return <p className="text-center">Loading products...</p>;
+  if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
     <section className="px-10 py-16 max-w-7xl mx-auto">
+      {/* Breadcrumb */}
+      <nav className="text-gray-400 text-sm mb-2" aria-label="breadcrumb">
+        <ol className="flex space-x-2">
+          <li>
+            <Link to="/" className="hover:text-indigo-500">
+              Home
+            </Link>
+            <span>/</span>
+          </li>
+          <li>
+            <Link to="/products" className="hover:text-indigo-500">
+              Products
+            </Link>
+            <span>{category ? "/" : ""}</span>
+          </li>
+          {category && <li className="capitalize text-white">{category}</li>}
+        </ol>
+      </nav>
       {/* Page Header */}
       <div className="mb-12">
-        <h1 className="text-4xl font-bold mb-3">All Products</h1>
+        <h1 className="text-4xl font-bold mb-3">
+          {category ? category.toUpperCase() : "All Products"}
+        </h1>
         <p className="text-gray-400">
           Discover our curated collection of premium products.
         </p>

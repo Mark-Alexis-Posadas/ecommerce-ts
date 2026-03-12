@@ -1,7 +1,4 @@
-import { useState, useEffect } from "react";
-import ProductCard from "../components/product/ProductCard";
-import Section from "../components/layout/Section";
-import Container from "../components/layout/Container";
+import ProductsGrid from "../components/home-page/ProductsGrid";
 import HeroSection from "../components/home-page/HeroSection";
 import FeaturedProducts from "../components/home-page/FeaturedProducts";
 import CategoriesSection from "../components/home-page/CategoriesSection";
@@ -14,46 +11,14 @@ type CartType = {
 };
 
 const HomePage = ({ handleAddToCart }: CartType) => {
-  const [products, setProducts] = useState<Product[]>([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("https://fakestoreapi.com/products");
-        const data: Product[] = await response.json();
-
-        setProducts(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
   return (
     <>
       <HeroSection />
-      <FeaturedProducts />
+      <FeaturedProducts handleAddToCart={handleAddToCart} />
       <CategoriesSection />
+      <ProductsGrid handleAddToCart={handleAddToCart} />
       <ValueProps />
       <PromoBanner />
-
-      <Section>
-        <Container>
-          <h1>Products</h1>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                handleAddToCart={handleAddToCart}
-              />
-            ))}
-          </div>
-        </Container>
-      </Section>
     </>
   );
 };
