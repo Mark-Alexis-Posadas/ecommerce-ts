@@ -8,7 +8,7 @@ import type { Product } from "../../types/product";
 
 const ProductsGrid: React.FC<{
   handleAddToCart: (product: Product) => void;
-}> = ({ handleAddToCart }) => {
+}> = ({ handleAddToCart, cartItems, incrementQty, decrementQty }) => {
   const { products, loading, error } = useProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("none");
@@ -60,6 +60,9 @@ const ProductsGrid: React.FC<{
               key={product.id}
               product={product}
               handleAddToCart={handleAddToCart}
+              cartItems={cartItems}
+              incrementQty={incrementQty}
+              decrementQty={decrementQty}
             />
           ))}
         </div>

@@ -16,6 +16,7 @@ const App = () => {
   const handleAddToCart = (product: Product) => {
     setCartItems((prev) => {
       const existingItem = prev.find((item) => item.id === product.id);
+
       if (existingItem) {
         return prev.map((item) =>
           item.id === product.id
@@ -28,17 +29,48 @@ const App = () => {
     });
   };
 
+  const incrementQty = (id: number) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+      ),
+    );
+  };
+
+  const decrementQty = (id: number) => {
+    setCartItems((prev) =>
+      prev
+        .map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
+        )
+        .filter((item) => item.quantity > 0),
+    );
+  };
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-900 via-black to-gray-900 text-white">
       <Navbar cartItems={cartItems} />
       <Routes>
         <Route
           path="/"
-          element={<HomePage handleAddToCart={handleAddToCart} />}
+          element={
+            <HomePage
+              cartItems={cartItems}
+              handleAddToCart={handleAddToCart}
+              incrementQty={incrementQty}
+              decrementQty={decrementQty}
+            />
+          }
         />
         <Route
           path="/products"
-          element={<ProductPage handleAddToCart={handleAddToCart} />}
+          element={
+            <ProductPage
+              handleAddToCart={handleAddToCart}
+              cartItems={cartItems}
+              incrementQty={incrementQty}
+              decrementQty={decrementQty}
+            />
+          }
         />
         <Route path="/categories" element={<Categories />} />
         <Route path="/contact" element={<Contact />} />

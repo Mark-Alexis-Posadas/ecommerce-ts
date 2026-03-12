@@ -8,7 +8,12 @@ type CartType = {
   handleAddToCart: (product: Product) => void;
 };
 
-const ProductPage = ({ handleAddToCart }: CartType) => {
+const ProductPage = ({
+  handleAddToCart,
+  cartItems,
+  incrementQty,
+  decrementQty,
+}: CartType) => {
   const { products, loading, error } = useProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("none");
@@ -109,6 +114,9 @@ const ProductPage = ({ handleAddToCart }: CartType) => {
             key={product.id}
             product={product}
             handleAddToCart={handleAddToCart}
+            cartItems={cartItems}
+            incrementQty={incrementQty}
+            decrementQty={decrementQty}
           />
         ))}
       </div>
