@@ -6,6 +6,7 @@ import ValueProps from "../components/home-page/ValueProps";
 import PromoBanner from "../components/home-page/PromoBanner";
 import type { Product } from "../types/product";
 import type { CartItem } from "../types/product";
+
 type CartType = {
   handleAddToCart: (product: Product) => void;
   cartItems: CartItem[];

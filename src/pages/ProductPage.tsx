@@ -6,11 +6,15 @@ import type { Product } from "../types/product";
 
 type CartType = {
   handleAddToCart: (product: Product) => void;
+  cartItems: CartItem[];
+  incrementQty: (id: number) => void;
+  decrementQty: (id: number) => void;
 };
 
 const ProductPage = ({
-  handleAddToCart,
   cartItems,
+  handleAddToCart,
+
   incrementQty,
   decrementQty,
 }: CartType) => {

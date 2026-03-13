@@ -6,9 +6,20 @@ import Section from "../layout/Section";
 import Container from "../layout/Container";
 import type { Product } from "../../types/product";
 
-const ProductsGrid: React.FC<{
+type Props = {
+  product: Product;
+  cartItems: CartItem[];
   handleAddToCart: (product: Product) => void;
-}> = ({ handleAddToCart, cartItems, incrementQty, decrementQty }) => {
+  incrementQty: (id: number) => void;
+  decrementQty: (id: number) => void;
+};
+
+const ProductsGrid = ({
+  handleAddToCart,
+  cartItems,
+  incrementQty,
+  decrementQty,
+}: Props) => {
   const { products, loading, error } = useProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("none");
@@ -59,8 +70,8 @@ const ProductsGrid: React.FC<{
             <ProductCard
               key={product.id}
               product={product}
-              handleAddToCart={handleAddToCart}
               cartItems={cartItems}
+              handleAddToCart={handleAddToCart}
               incrementQty={incrementQty}
               decrementQty={decrementQty}
             />

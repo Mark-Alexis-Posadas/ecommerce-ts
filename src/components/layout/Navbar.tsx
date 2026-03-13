@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import Cart from "../ui/Cart";
-import type { CartItem } from "../../types/product";
-import { useState } from "react";
 
-type NavbarProps = {
-  cartItems: CartItem[];
-};
-const Navbar = ({ cartItems }: NavbarProps) => {
+import { useState } from "react";
+import { useCart } from "../../context/CartContext";
+
+const Navbar = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+  const { cartItems } = useCart();
+
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   return (
     <>
       <nav className="sticky top-0 z-50 backdrop-blur-xl bg-black/40 border-b border-white/10 mb-5">
@@ -71,9 +72,11 @@ const Navbar = ({ cartItems }: NavbarProps) => {
               onClick={() => setIsCartOpen(true)}
             >
               🛒
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 rounded-full">
-                {cartItems.length}
-              </span>
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 rounded-full">
+                  {totalItems}
+                </span>
+              )}
             </button>
 
             {/* Login */}
