@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Cart from "../ui/Cart";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useCart } from "../../context/CartContext";
 
@@ -71,7 +72,7 @@ const Navbar = () => {
               className="relative text-gray-700 hover:text-indigo-600"
               onClick={() => setIsCartOpen(true)}
             >
-              🛒
+              <FontAwesomeIcon icon={faCartShopping} className="text-white" />
               {totalItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 rounded-full">
                   {totalItems}

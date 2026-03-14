@@ -1,6 +1,7 @@
 import { useCart } from "../../context/CartContext";
 import type { Product } from "../../types/product";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 type Props = {
   product: Product;
 };
@@ -40,9 +41,15 @@ const ProductCard = ({ product }: Props) => {
           </button>
         ) : (
           <div className="mt-5 flex items-center justify-between bg-indigo-600 rounded-xl p-2">
-            <button onClick={() => decrementQty(product.id)}>-</button>
+            <button onClick={() => decrementQty(product.id)}>
+              <FontAwesomeIcon icon={faMinus} />
+            </button>
+
             <span>{cartItem.quantity}</span>
-            <button onClick={() => incrementQty(product.id)}>+</button>
+
+            <button onClick={() => incrementQty(product.id)}>
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
           </div>
         )}
       </div>
