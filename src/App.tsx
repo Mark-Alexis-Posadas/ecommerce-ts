@@ -7,7 +7,8 @@ import HomePage from "./pages/HomePage";
 import ProductPage from "./pages/ProductPage";
 import Categories from "./pages/Categories";
 import Contact from "./pages/Contact";
-
+import CheckoutPage from "./pages/CheckoutPage";
+import OrderSuccess from "./pages/OrderSuccessPage";
 const App = () => {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-900 via-black to-gray-900 text-white">
@@ -18,6 +19,8 @@ const App = () => {
         <Route path="/products" element={<ProductPage />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/order-success" element={<OrderSuccess />} />
       </Routes>
 
       <Footer />

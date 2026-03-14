@@ -1,5 +1,5 @@
 import type { CartItem } from "../../types/product";
-
+import { Link } from "react-router-dom";
 type CartProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -71,9 +71,12 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
           </span>
         </div>
 
-        <button className="w-full bg-indigo-600 py-3 rounded-xl font-semibold hover:bg-indigo-500 transition">
+        <Link
+          to="/checkout"
+          className="w-full bg-indigo-600 py-3 rounded-xl font-semibold hover:bg-indigo-500 transition"
+        >
           Checkout
-        </button>
+        </Link>
       </div>
     </div>
   );
