@@ -1,5 +1,10 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useCart } from "../../context/CartContext";
 import type { CartItem } from "../../types/product";
+
 import { Link } from "react-router-dom";
+
 type CartProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -7,6 +12,8 @@ type CartProps = {
 };
 
 const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
+  const { incrementQty, decrementQty } = useCart();
+
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
@@ -52,6 +59,25 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
                 <p className="text-sm text-gray-400">
                   ${item.price} × {item.quantity}
                 </p>
+                <div className="mt-3 flex items-center gap-2">
+                  <button
+                    onClick={() => decrementQty(item.id)}
+                    className="w-7 h-7 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 rounded text-xs"
+                  >
+                    <FontAwesomeIcon icon={faMinus} />
+                  </button>
+
+                  <span className="text-sm font-medium w-5 text-center">
+                    {item.quantity}
+                  </span>
+
+                  <button
+                    onClick={() => incrementQty(item.id)}
+                    className="w-7 h-7 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 rounded text-xs"
+                  >
+                    <FontAwesomeIcon icon={faPlus} />
+                  </button>
+                </div>
               </div>
 
               <div className="text-sm text-indigo-400 font-semibold">
@@ -63,21 +89,23 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
       </div>
 
       {/* Footer */}
-      <div className="absolute bottom-0 w-full border-t border-white/10 p-5">
-        <div className="flex justify-between mb-4 text-white">
-          <span>Total</span>
-          <span className="font-semibold text-indigo-400">
-            ${total.toFixed(2)}
-          </span>
-        </div>
+      {cartItems.length > 0 && (
+        <div className="absolute bottom-0 w-full border-t border-white/10 p-5">
+          <div className="flex justify-between mb-4 text-white">
+            <span>Total</span>
+            <span className="font-semibold text-indigo-400">
+              ${total.toFixed(2)}
+            </span>
+          </div>
 
-        <Link
-          to="/checkout"
-          className="w-full bg-indigo-600 py-3 rounded-xl font-semibold hover:bg-indigo-500 transition"
-        >
-          Checkout
-        </Link>
-      </div>
+          <Link
+            to="/checkout"
+            className="w-full  bg-indigo-600 p-3 rounded-xl font-semibold hover:bg-indigo-500 transition"
+          >
+            Checkout
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
