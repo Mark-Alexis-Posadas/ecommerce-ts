@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Cart from "../ui/Cart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping, faSun } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useCart } from "../../context/CartContext";
 
@@ -87,6 +87,10 @@ const Navbar = () => {
             >
               Login
             </Link>
+
+            <button className="relative text-gray-700 hover:text-indigo-600">
+              <FontAwesomeIcon icon={faSun} className="text-white" />
+            </button>
           </div>
         </div>
       </nav>
