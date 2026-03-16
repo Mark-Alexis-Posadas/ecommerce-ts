@@ -4,22 +4,8 @@ import useProducts from "../../hooks/useProducts";
 import ProductCard from "../product/ProductCard";
 import Section from "../layout/Section";
 import Container from "../layout/Container";
-import type { Product } from "../../types/product";
 
-type Props = {
-  product: Product;
-  cartItems: CartItem[];
-  handleAddToCart: (product: Product) => void;
-  incrementQty: (id: number) => void;
-  decrementQty: (id: number) => void;
-};
-
-const ProductsGrid = ({
-  handleAddToCart,
-  cartItems,
-  incrementQty,
-  decrementQty,
-}: Props) => {
+const ProductsGrid = () => {
   const { products, loading, error } = useProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("none");
@@ -67,14 +53,7 @@ const ProductsGrid = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              cartItems={cartItems}
-              handleAddToCart={handleAddToCart}
-              incrementQty={incrementQty}
-              decrementQty={decrementQty}
-            />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </Container>

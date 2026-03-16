@@ -2,22 +2,8 @@ import { useMemo, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import ProductCard from "../components/product/ProductCard";
 import useProducts from "../hooks/useProducts";
-import type { Product } from "../types/product";
 
-type CartType = {
-  handleAddToCart: (product: Product) => void;
-  cartItems: CartItem[];
-  incrementQty: (id: number) => void;
-  decrementQty: (id: number) => void;
-};
-
-const ProductPage = ({
-  cartItems,
-  handleAddToCart,
-
-  incrementQty,
-  decrementQty,
-}: CartType) => {
+const ProductPage = () => {
   const { products, loading, error } = useProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("none");
@@ -114,14 +100,7 @@ const ProductPage = ({
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {filteredProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            handleAddToCart={handleAddToCart}
-            cartItems={cartItems}
-            incrementQty={incrementQty}
-            decrementQty={decrementQty}
-          />
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </section>
