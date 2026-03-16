@@ -1,4 +1,4 @@
-import { useCart } from "../context/CartContext";
+import { useCart } from "../hooks/useCart";
 import { useNavigate } from "react-router-dom";
 const CheckoutPage = () => {
   const { cartItems } = useCart();
@@ -87,7 +87,7 @@ const CheckoutPage = () => {
                 className="flex justify-between text-sm border-b border-white/10 pb-2"
               >
                 <span>
-                  {item.name} x {item.quantity}
+                  {item.title} x {item.quantity}
                 </span>
                 <span>₱{item.price * item.quantity}</span>
               </div>

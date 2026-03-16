@@ -3,7 +3,7 @@ import Cart from "../ui/Cart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faSun } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../../hooks/useCart";
 
 const Navbar = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);

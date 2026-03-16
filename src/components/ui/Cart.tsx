@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../../hooks/useCart";
 import type { CartItem } from "../../types/product";
 
 import { Link } from "react-router-dom";
