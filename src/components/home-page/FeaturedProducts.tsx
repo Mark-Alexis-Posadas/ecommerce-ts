@@ -1,11 +1,8 @@
-import React from "react";
 import ProductCard from "../product/ProductCard";
 import useProducts from "../../hooks/useProducts";
 import type { Product } from "../../types/product";
 
-const FeaturedProducts: React.FC<{
-  handleAddToCart: (product: Product) => void;
-}> = ({ handleAddToCart }) => {
+const FeaturedProducts = () => {
   const { products, loading, error } = useProducts();
 
   // example: pick top 4 rated products as featured
@@ -25,11 +22,7 @@ const FeaturedProducts: React.FC<{
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         {featured.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            handleAddToCart={handleAddToCart}
-          />
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </section>

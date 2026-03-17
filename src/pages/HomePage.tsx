@@ -9,7 +9,7 @@ const HomePage = () => {
   return (
     <>
       <HeroSection />
-      <FeaturedProducts handleAddToCart={handleAddToCart} />
+      <FeaturedProducts />
       <CategoriesSection />
       <ProductsGrid />
       <ValueProps />

@@ -1,13 +1,14 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import ProductCard from "../components/product/ProductCard";
 import useProducts from "../hooks/useProducts";
-
+import Pagination from "../components/ui/Pagination";
 const ProductPage = () => {
   const { products, loading, error } = useProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("none");
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
 
@@ -39,6 +40,17 @@ const ProductPage = () => {
 
     return items;
   }, [products, searchQuery, sortOption, category]);
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+  const paginatedProducts = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredProducts.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredProducts, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, sortOption, category]);
 
   if (loading) return <p className="text-center">Loading products...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
@@ -99,10 +111,16 @@ const ProductPage = () => {
 
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {filteredProducts.map((product) => (
+        {paginatedProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
     </section>
   );
 };
