@@ -56,6 +56,15 @@ const Navbar = () => {
                 Contact
               </Link>
             </li>
+
+            <li>
+              <Link
+                to="/practice"
+                className="hidden md:block text-sm font-medium text-gray-300 hover:text-white transition"
+              >
+                Pratice
+              </Link>
+            </li>
           </ul>
 
           {/* Right Side */}

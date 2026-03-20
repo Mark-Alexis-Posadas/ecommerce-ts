@@ -9,6 +9,7 @@ import Categories from "./pages/Categories";
 import Contact from "./pages/Contact";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderSuccess from "./pages/OrderSuccessPage";
+import Pratice from "./pages/Pratice";
 const App = () => {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-900 via-black to-gray-900 text-white">
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/order-success" element={<OrderSuccess />} />
+        <Route path="/practice" element={<Pratice />} />
       </Routes>
 
       <Footer />
