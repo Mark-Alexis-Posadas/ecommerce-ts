@@ -1,19 +1,27 @@
-import ProductsGrid from "../components/home-page/ProductsGrid";
 import HeroSection from "../components/home-page/HeroSection";
-import FeaturedProducts from "../components/home-page/FeaturedProducts";
-import CategoriesSection from "../components/home-page/CategoriesSection";
 import ValueProps from "../components/home-page/ValueProps";
+import CategoriesSection from "../components/home-page/CategoriesSection";
+import FeaturedProducts from "../components/home-page/FeaturedProducts";
+import ProductsGrid from "../components/home-page/ProductsGrid";
+import FlashSale from "../components/home-page/FlashSale";
+import Testimonials from "../components/home-page/Testimonials";
+
 import PromoBanner from "../components/home-page/PromoBanner";
+
+import NewsletterSignup from "../components/home-page/NewsLetterSignup";
 
 const HomePage = () => {
   return (
     <>
       <HeroSection />
-      <FeaturedProducts />
-      <CategoriesSection />
-      <ProductsGrid />
       <ValueProps />
+      <CategoriesSection />
+      <FlashSale />
+      <FeaturedProducts />
+      <ProductsGrid />
+      <Testimonials />
       <PromoBanner />
+      <NewsletterSignup />
     </>
   );
 };
