@@ -1,12 +1,10 @@
 import { useMemo, useState } from "react";
 
-import useProducts from "../../hooks/useProducts";
 import ProductCard from "../product/ProductCard";
 import Section from "../layout/Section";
 import Container from "../layout/Container";
 
-const ProductsGrid = () => {
-  const { products, loading, error } = useProducts();
+const ProductsGrid = ({ products, loading, error }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("none");
 
