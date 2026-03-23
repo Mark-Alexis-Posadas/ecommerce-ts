@@ -3,13 +3,7 @@ import { useMemo, useState } from "react";
 import ProductCard from "../product/ProductCard";
 import Section from "../layout/Section";
 import Container from "../layout/Container";
-import type { Product } from "../../types/product";
-
-type ProductProps = {
-  products: Product;
-  loading: boolean;
-  error: boolean;
-};
+import type { ProductProps } from "../../types/product";
 
 const ProductsGrid = ({ products, loading, error }: ProductProps) => {
   const [searchQuery, setSearchQuery] = useState("");

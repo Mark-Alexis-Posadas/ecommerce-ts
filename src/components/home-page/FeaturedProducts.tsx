@@ -1,8 +1,8 @@
 import ProductCard from "../product/ProductCard";
 
-import type { Product } from "../../types/product";
+import type { Product, ProductProps } from "../../types/product";
 
-const FeaturedProducts = ({ products, loading, error }) => {
+const FeaturedProducts = ({ products, loading, error }: ProductProps) => {
   // example: pick top 4 rated products as featured
   const featured: Product[] = products
     .sort((a, b) => b.rating.rate - a.rating.rate)
