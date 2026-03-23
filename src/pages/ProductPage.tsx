@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import ProductCard from "../components/product/ProductCard";
 import useProducts from "../hooks/useProducts";
@@ -14,6 +14,12 @@ const ProductPage = () => {
 
   const handleSearchProduct = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (value: string) => {
+    setSortOption(value);
+    setCurrentPage(1);
   };
 
   const filteredProducts = useMemo(() => {
@@ -47,10 +53,6 @@ const ProductPage = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return filteredProducts.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredProducts, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, sortOption, category]);
 
   if (loading) return <p className="text-center">Loading products...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
@@ -99,7 +101,7 @@ const ProductPage = () => {
         {/* Sort */}
         <select
           value={sortOption}
-          onChange={(e) => setSortOption(e.target.value)}
+          onChange={(e) => handleSortChange(e.target.value)}
           className="rounded-xl bg-white/10 border border-white/10 px-4 py-2 text-sm text-gray-300 focus:outline-none"
         >
           <option value="none">Sort by</option>
