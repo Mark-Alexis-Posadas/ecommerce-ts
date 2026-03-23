@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { Product } from "../types/product";
+import { useCart } from "../hooks/useCart";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
-
+  const { addToCart } = useCart();
   useEffect(() => {
     const fetchProduct = async () => {
       const res = await fetch(`https://fakestoreapi.com/products/${id}`);
@@ -35,7 +36,13 @@ const ProductDetails = () => {
             ₱{product.price}
           </p>
 
-          <button className="px-6 py-3 bg-indigo-600 rounded-xl font-bold hover:bg-indigo-500 transition">
+          <button
+            onClick={(e) => {
+              e.stopPropagation(); // extra safety
+              addToCart(product);
+            }}
+            className="px-6 py-3 bg-indigo-600 rounded-xl font-bold hover:bg-indigo-500 transition"
+          >
             Add to Cart
           </button>
         </div>
