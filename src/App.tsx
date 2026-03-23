@@ -1,8 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 
-import Footer from "./components/layout/Footer";
-import Navbar from "./components/layout/Navbar";
+// layouts
+import MainLayout from "./layouts/MainLayout";
+import AuthLayout from "./layouts/AuthLayout";
 
+// pages
 import HomePage from "./pages/HomePage";
 import ProductPage from "./pages/ProductPage";
 import Categories from "./pages/Categories";
@@ -10,12 +12,13 @@ import Contact from "./pages/Contact";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderSuccess from "./pages/OrderSuccessPage";
 import ProductDetails from "./pages/ProductDetails";
+import LoginPage from "./pages/LoginPage";
+
 const App = () => {
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-900 via-black to-gray-900 text-white">
-      <Navbar />
-
-      <Routes>
+    <Routes>
+      {/* MAIN APP */}
+      <Route element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<ProductPage />} />
         <Route path="/products/:id" element={<ProductDetails />} />
@@ -23,10 +26,13 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/order-success" element={<OrderSuccess />} />
-      </Routes>
+      </Route>
 
-      <Footer />
-    </div>
+      {/* AUTH */}
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<LoginPage />} />
+      </Route>
+    </Routes>
   );
 };
 
