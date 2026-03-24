@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Product } from "../types/product";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const useProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -9,11 +10,17 @@ const useProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("https://fakestoreapi.com/products");
+        const res = await fetch(`${API_URL}/api/products`);
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch");
+        }
+
         const data: Product[] = await res.json();
         setProducts(data);
       } catch (error) {
-        setError("Failed to fetch products", error);
+        setError("Failed to fetch products");
+        console.error(error);
       } finally {
         setLoading(false);
       }
