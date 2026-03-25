@@ -10,10 +10,10 @@ const ProductsGrid = ({ products, loading, error }: ProductProps) => {
   const [sortOption, setSortOption] = useState("none");
 
   const filteredProducts = useMemo(() => {
-    let items = products.filter((p) =>
-      p.title.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
-
+    let items = products.filter((p) => {
+      const title = p.title || "";
+      return title.toLowerCase().includes(searchQuery.toLowerCase());
+    });
     if (sortOption === "low_to_high")
       items = [...items].sort((a, b) => a.price - b.price);
     if (sortOption === "high_to_low")
@@ -52,7 +52,7 @@ const ProductsGrid = ({ products, loading, error }: ProductProps) => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product._id} product={product} />
           ))}
         </div>
       </Container>

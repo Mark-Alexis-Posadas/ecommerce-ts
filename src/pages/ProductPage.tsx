@@ -31,10 +31,10 @@ const ProductPage = () => {
     }
 
     // search
-    items = items.filter((product) =>
-      product.title.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
-
+    items = items.filter((product) => {
+      const title = product.title || "";
+      return title.toLowerCase().includes(searchQuery.toLowerCase());
+    });
     // sorting
     if (sortOption === "low_to_high") {
       items = [...items].sort((a, b) => a.price - b.price);
@@ -114,7 +114,7 @@ const ProductPage = () => {
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {paginatedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product._id} product={product} />
         ))}
       </div>
 
