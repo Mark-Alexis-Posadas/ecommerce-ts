@@ -10,11 +10,11 @@ type Props = {
 const ProductCard = ({ product }: Props) => {
   const { cartItems, addToCart, incrementQty, decrementQty } = useCart();
 
-  const cartItem = cartItems.find((item) => item.id === product.id);
+  const cartItem = cartItems.find((item) => item._id === product._id);
 
   return (
     <div className="group relative rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-indigo-500/40 transition-all duration-300 hover:-translate-y-3">
-      <Link to={`/products/${product.id}`}>
+      <Link to={`/products/${product._id}`}>
         <div className="h-48 flex items-center justify-center bg-white p-4 rounded-t-2xl">
           <img
             src={product.image}
@@ -49,13 +49,13 @@ const ProductCard = ({ product }: Props) => {
           </button>
         ) : (
           <div className="mt-5 flex items-center justify-between bg-indigo-600 rounded-xl p-2">
-            <button onClick={() => decrementQty(product.id)}>
+            <button onClick={() => decrementQty(product._id)}>
               <FontAwesomeIcon icon={faMinus} />
             </button>
 
             <span>{cartItem.quantity}</span>
 
-            <button onClick={() => incrementQty(product.id)}>
+            <button onClick={() => incrementQty(product._id)}>
               <FontAwesomeIcon icon={faPlus} />
             </button>
           </div>
