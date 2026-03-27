@@ -2,14 +2,14 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { Product } from "../types/product";
 import { useCart } from "../hooks/useCart";
-
+const API_URL = import.meta.env.VITE_API_URL;
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const { addToCart } = useCart();
   useEffect(() => {
     const fetchProduct = async () => {
-      const res = await fetch(`https://fakestoreapi.com/products/${id}`);
+      const res = await fetch(`${API_URL}/api/products/${id}`);
       const data = await res.json();
       setProduct(data);
     };
