@@ -1,19 +1,16 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+const API_URL = import.meta.env.VITE_API_URL;
 const Categories = () => {
   const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(
-          "https://fakestoreapi.com/products/categories",
-        );
+        const response = await fetch(`${API_URL}/api/products/categories`);
+        const data = await response.json();
 
-        const data: string[] = await response.json();
-
-        setCategories(data);
+        setCategories(data.data);
       } catch (error) {
         console.error(error);
       }

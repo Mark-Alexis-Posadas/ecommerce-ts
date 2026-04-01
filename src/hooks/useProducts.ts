@@ -17,7 +17,7 @@ const useProducts = () => {
         }
 
         const data: Product[] = await res.json();
-        setProducts(data);
+        setProducts(data.data);
       } catch (error) {
         setError("Failed to fetch products");
         console.error(error);

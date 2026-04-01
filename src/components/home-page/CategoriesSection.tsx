@@ -10,8 +10,12 @@ const CategoriesSection: React.FC = () => {
         const res = await fetch("https://fakestoreapi.com/products/categories");
         const data: string[] = await res.json();
         setCategories(data);
-      } catch (err) {
-        console.error(err);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error("An error occurred. Please try again.");
+        }
       }
     };
     fetchCategories();
