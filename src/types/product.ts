@@ -11,6 +11,7 @@ export type Product = {
   image: string;
   description: string;
   rating: Rating;
+  createdAt: string;
 };
 
 export type CartItem = Product & {
