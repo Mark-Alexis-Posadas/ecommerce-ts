@@ -39,6 +39,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
+  const removeFromCart = (id: number) => {
+    setCartItems((prev) => prev.filter((item) => item._id !== id));
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -46,6 +50,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         addToCart,
         incrementQty,
         decrementQty,
+        removeFromCart,
       }}
     >
       {children}

@@ -13,6 +13,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import OrderSuccess from "./pages/OrderSuccessPage";
 import ProductDetails from "./pages/ProductDetails";
 import LoginPage from "./pages/LoginPage";
+import OrdersPage from "./pages/OrdersPage";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/order-success" element={<OrderSuccess />} />
+        <Route path="/orders" element={<OrdersPage />} />
       </Route>
 
       {/* AUTH */}

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useCart } from "../../hooks/useCart";
 import type { CartItem } from "../../types/product";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ type CartProps = {
 };
 
 const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
-  const { incrementQty, decrementQty } = useCart();
+  const { incrementQty, decrementQty, removeFromCart } = useCart();
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -67,7 +67,7 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
             ) : (
               cartItems.map((item) => (
                 <div
-                  key={item.id}
+                  key={item._id}
                   className="flex gap-3 border-b border-white/10 pb-3"
                 >
                   <img
@@ -87,7 +87,7 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
 
                     <div className="mt-3 flex items-center gap-2">
                       <button
-                        onClick={() => decrementQty(item.id)}
+                        onClick={() => decrementQty(item._id)}
                         className="w-7 h-7 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 active:scale-90 transition rounded text-xs"
                       >
                         <FontAwesomeIcon icon={faMinus} />
@@ -98,16 +98,24 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
                       </span>
 
                       <button
-                        onClick={() => incrementQty(item.id)}
+                        onClick={() => incrementQty(item._id)}
                         className="w-7 h-7 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 active:scale-90 transition rounded text-xs"
                       >
                         <FontAwesomeIcon icon={faPlus} />
                       </button>
                     </div>
                   </div>
+                  <div className="flex flex-col items-end justify-between">
+                    <button
+                      onClick={() => removeFromCart(item._id)}
+                      className="text-gray-400 hover:text-red-500 transition text-sm"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
 
-                  <div className="text-sm text-indigo-400 font-semibold">
-                    {formatCurrency(item.price * item.quantity)}
+                    <div className="text-sm text-indigo-400 font-semibold">
+                      {formatCurrency(item.price * item.quantity)}
+                    </div>
                   </div>
                 </div>
               ))

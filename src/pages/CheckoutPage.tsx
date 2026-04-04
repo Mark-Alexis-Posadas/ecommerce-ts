@@ -11,9 +11,19 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
 
   const handlePlaceOrder = () => {
-    // dito pwede mo i-clear cart
-    navigate("/order-success");
+    const newOrder = {
+      id: `ORD-${Date.now()}`,
+      items: cartItems,
+      total,
+      status: "pending",
+      createdAt: new Date().toISOString(),
+    };
+
+    // TODO: save to state / context / backend
+
+    navigate("/orders");
   };
+
   return (
     <div className="min-h-screen px-6 md:px-10 py-12 max-w-7xl mx-auto">
       <h1 className="text-4xl font-bold mb-10">Checkout</h1>
@@ -80,16 +90,33 @@ const CheckoutPage = () => {
         <div className="bg-white/5 p-6 rounded-xl border border-white/10 h-fit">
           <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
 
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-80 overflow-y-auto pr-2">
             {cartItems.map((item) => (
               <div
-                key={item.id}
-                className="flex justify-between text-sm border-b border-white/10 pb-2"
+                key={item._id}
+                className="flex items-center gap-4 border-b border-white/10 pb-4"
               >
-                <span>
-                  {item.title} x {item.quantity}
-                </span>
-                <span>₱{item.price * item.quantity}</span>
+                {/* IMAGE */}
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-16 h-16 object-contain bg-white rounded-lg p-2"
+                />
+
+                {/* INFO */}
+                <div className="flex-1">
+                  <p className="text-sm font-semibold">{item.title}</p>
+
+                  {/* SUBTOTAL BREAKDOWN */}
+                  <p className="text-xs text-gray-400">
+                    ₱{item.price} × {item.quantity}
+                  </p>
+                </div>
+
+                {/* PRICE */}
+                <p className="text-sm font-bold">
+                  ₱{item.price * item.quantity}
+                </p>
               </div>
             ))}
           </div>
