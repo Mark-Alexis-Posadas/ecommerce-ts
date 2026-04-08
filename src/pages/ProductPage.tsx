@@ -11,7 +11,7 @@ const ProductPage = () => {
   const itemsPerPage = 8;
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
-  console.log(products);
+
   const handleSearchProduct = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
