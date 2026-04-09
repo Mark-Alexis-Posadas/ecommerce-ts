@@ -1,8 +1,45 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+
+const API_URL = "http://localhost:5000/api/auth";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post(`${API_URL}/login`, {
+        email,
+        password,
+      });
+
+      console.log("LOGIN RESPONSE:", res.data);
+
+      const token = res.data.token;
+
+      if (!token) {
+        alert("No token received");
+        return;
+      }
+
+      // 🔥 SAVE TOKEN
+      localStorage.setItem("token", token);
+
+      alert("Login successful!");
+
+      // redirect
+      navigate("/");
+    } catch (error: any) {
+      console.error(error);
+      alert(error.response?.data?.message || "Login failed");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black text-white relative overflow-hidden">
@@ -19,11 +56,13 @@ const LoginPage = () => {
         </p>
 
         {/* Form */}
-        <form className="flex flex-col gap-4">
+        <form onSubmit={handleLogin} className="flex flex-col gap-4">
           {/* Email */}
           <div>
             <label className="text-sm text-gray-300">Email</label>
             <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="you@example.com"
               className="w-full mt-1 p-3 rounded-xl bg-black/40 border border-white/10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 outline-none transition"
@@ -35,6 +74,8 @@ const LoginPage = () => {
             <label className="text-sm text-gray-300">Password</label>
             <div className="relative">
               <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 className="w-full mt-1 p-3 rounded-xl bg-black/40 border border-white/10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 outline-none transition"
@@ -60,12 +101,12 @@ const LoginPage = () => {
           </div>
 
           {/* Login Button */}
-          <Link
-            to="/"
-            className="mt-2 bg-indigo-600 hover:bg-indigo-500 active:scale-95 transition p-3 rounded-xl font-semibold text-center"
+          <button
+            type="submit"
+            className="bg-indigo-600 p-3 rounded-xl font-semibold"
           >
-            <button type="submit">Login</button>
-          </Link>
+            Login
+          </button>
         </form>
 
         {/* Divider */}

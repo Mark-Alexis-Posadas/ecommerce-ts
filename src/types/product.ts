@@ -4,7 +4,7 @@ export type Rating = {
 };
 
 export type Product = {
-  _id: number;
+  _id: string;
   title: string;
   price: number;
   category: string;

@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { CartContext } from "./CartContext";
 import type { CartItem, Product } from "../types/product";
 import * as cartAPI from "../services/cartService";
-
+import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
@@ -31,7 +32,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const incrementQty = async (productId: string, token: string) => {
     return axios.put(
-      `${API}/increment`,
+      `${API_URL}/increment`,
       { productId },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -41,7 +42,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const decrementQty = async (productId: string, token: string) => {
     return axios.put(
-      `${API}/decrement`,
+      `${API_URL}/decrement`,
       { productId },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -49,7 +50,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
-  const removeFromCart = (id: number) => {
+  const removeFromCart = (id: string) => {
     setCartItems((prev) => prev.filter((item) => item._id !== id));
   };
 
