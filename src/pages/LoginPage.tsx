@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const API_URL = "http://localhost:5000/api/auth";
 
@@ -20,6 +21,9 @@ const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+
+    const loadingToast = toast.loading("Logging in...");
+
     try {
       const res = await axios.post(`${API_URL}/login`, {
         email,
@@ -31,21 +35,23 @@ const LoginPage = () => {
       const token: string | undefined = res.data?.token;
 
       if (!token) {
-        alert("No token received");
+        toast.dismiss(loadingToast);
+        toast.error("No token received ❌");
         return;
       }
-
       // 🔥 SAVE TOKEN
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      toast.dismiss(loadingToast);
+      toast.success("Login successful 🎉");
       navigate("/", { replace: true });
       // redirect
       navigate("/");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data?.message || "Login failed");
+        toast.error(error.response?.data?.message || "Login failed ❌");
       } else {
-        alert("Something went wrong");
+        toast.error("Something went wrong ❌");
       }
     } finally {
       setLoading(false);
@@ -75,7 +81,7 @@ const LoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               type="email"
-              placeholder="you@example.com"
+              placeholder="test2@email.com"
               className="w-full mt-1 p-3 rounded-xl bg-black/40 border border-white/10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 outline-none transition"
             />
           </div>
