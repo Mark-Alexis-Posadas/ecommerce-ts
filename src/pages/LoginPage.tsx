@@ -114,9 +114,10 @@ const LoginPage = () => {
           {/* Login Button */}
           <button
             type="submit"
-            className="bg-indigo-600 p-3 rounded-xl font-semibold"
+            disabled={loading}
+            className="bg-indigo-600 p-3 rounded-xl font-semibold disabled:opacity-50"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
