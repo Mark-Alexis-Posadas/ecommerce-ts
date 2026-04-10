@@ -30,9 +30,12 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const incrementQty = async (productId: string, token: string) => {
+  const incrementQty = async (productId: string) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
     return axios.put(
-      `${API_URL}/increment`,
+      `${API_URL}/api/cart/increment`,
       { productId },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -40,9 +43,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
-  const decrementQty = async (productId: string, token: string) => {
+  const decrementQty = async (productId: string) => {
+    const token = localStorage.getItem("token");
     return axios.put(
-      `${API_URL}/decrement`,
+      `${API_URL}/api/cart/decrement`,
       { productId },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -50,8 +54,24 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
-  const removeFromCart = (id: string) => {
-    setCartItems((prev) => prev.filter((item) => item._id !== id));
+  const removeFromCart = async (productId: string) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const res = await axios.delete(`${API_URL}/api/cart/${productId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setCartItems(
+        res.data.items.map((item: any) => ({
+          ...item.product,
+          quantity: item.quantity,
+        })),
+      );
+    } catch (error) {
+      console.error("Remove from cart failed", error);
+    }
   };
 
   useEffect(() => {

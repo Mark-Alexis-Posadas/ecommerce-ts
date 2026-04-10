@@ -4,9 +4,9 @@ import type { CartItem, Product } from "../types/product";
 export type CartContextType = {
   cartItems: CartItem[];
   addToCart: (product: Product) => void;
-  incrementQty: (id: number) => void;
-  decrementQty: (id: number) => void;
-  removeFromCart: (id: number) => void;
+  incrementQty: (id: string) => void;
+  decrementQty: (id: string) => void;
+  removeFromCart: (id: string) => void;
 };
 
 export const CartContext = createContext<CartContextType | null>(null);

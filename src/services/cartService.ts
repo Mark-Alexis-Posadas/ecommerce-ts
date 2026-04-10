@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "/api/cart";
+const API = "http://localhost:5000/api/cart";
 
 export const getCart = async (token: string) => {
   return axios.get(API, {

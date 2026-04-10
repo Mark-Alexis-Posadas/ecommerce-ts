@@ -7,7 +7,7 @@ import BestSellers from "../components/home-page/BestSellers";
 import NewArrivals from "../components/home-page/NewArrivals";
 import Testimonials from "../components/home-page/Testimonials";
 import PromoBanner from "../components/home-page/PromoBanner";
-import FAQSection from "../components/home-page/FaqSection";
+import FAQSection from "../components/home-page/FAQSection";
 import NewsletterSignup from "../components/home-page/NewsLetterSignup";
 import useProducts from "../hooks/useProducts";
 
