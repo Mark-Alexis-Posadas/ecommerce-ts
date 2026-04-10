@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Navigate } from "react-router-dom";
 import axios from "axios";
 
 const API_URL = "http://localhost:5000/api/auth";
@@ -8,11 +8,18 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   const navigate = useNavigate();
+  const isAuthenticated: boolean = !!localStorage.getItem("token");
 
-  const handleLogin = async (e: React.FormEvent) => {
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const res = await axios.post(`${API_URL}/login`, {
         email,
@@ -21,7 +28,7 @@ const LoginPage = () => {
 
       console.log("LOGIN RESPONSE:", res.data);
 
-      const token = res.data.token;
+      const token: string | undefined = res.data?.token;
 
       if (!token) {
         alert("No token received");
@@ -30,14 +37,18 @@ const LoginPage = () => {
 
       // 🔥 SAVE TOKEN
       localStorage.setItem("token", token);
-
-      alert("Login successful!");
-
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      navigate("/", { replace: true });
       // redirect
       navigate("/");
-    } catch (error: any) {
-      console.error(error);
-      alert(error.response?.data?.message || "Login failed");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || "Login failed");
+      } else {
+        alert("Something went wrong");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 

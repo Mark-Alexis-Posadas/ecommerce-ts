@@ -8,7 +8,7 @@ import { useCart } from "../../hooks/useCart";
 const Navbar = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const { cartItems } = useCart();
-
+  const token = localStorage.getItem("token");
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   return (
     <>
@@ -81,12 +81,32 @@ const Navbar = () => {
             </button>
 
             {/* Login */}
-            <Link
-              to="/login"
-              className="bg-indigo-600 text-white px-4 py-1.5 rounded-lg hover:bg-indigo-700 transition"
-            >
-              Login
-            </Link>
+            {token ? (
+              <div className="flex items-center gap-3">
+                {/* Avatar */}
+                <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-bold">
+                  U
+                </div>
+
+                {/* Logout */}
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    window.location.reload();
+                  }}
+                  className="text-sm text-red-400"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="bg-indigo-600 text-white px-4 py-1.5 rounded-lg"
+              >
+                Login
+              </Link>
+            )}
           </div>
         </div>
       </nav>
