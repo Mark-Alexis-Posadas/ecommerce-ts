@@ -20,7 +20,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       const res = await cartAPI.addToCart(product._id, 1, token);
 
       setCartItems(
-        res.data.items.map((item: CartItemFromAP) => ({
+        res.data.items.map((item: CartItemFromAPI) => ({
           ...item.product,
           quantity: item.quantity,
         })),
