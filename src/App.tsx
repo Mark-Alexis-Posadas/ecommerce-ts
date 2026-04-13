@@ -14,6 +14,7 @@ import OrderSuccess from "./pages/OrderSuccessPage";
 import ProductDetails from "./pages/ProductDetails";
 import LoginPage from "./pages/LoginPage";
 import OrdersPage from "./pages/OrdersPage";
+import RegisterPage from "./pages/RegisterPage";
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const App = () => {
       {/* AUTH */}
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Route>
     </Routes>
   );
