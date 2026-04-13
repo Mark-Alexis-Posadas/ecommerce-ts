@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const OrderSuccess = () => {
+const Page = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center text-center px-6">
       <div className="bg-white/5 p-10 rounded-2xl border border-white/10 max-w-lg">
@@ -23,4 +23,4 @@ const OrderSuccess = () => {
   );
 };
 
-export default OrderSuccess;
+export default Page;

@@ -7,11 +7,11 @@ import AuthLayout from "./layouts/AuthLayout";
 // pages
 import HomePage from "./pages/HomePage";
 import ProductPage from "./pages/ProductPage";
-import Categories from "./pages/Categories";
-import Contact from "./pages/Contact";
+import CategoriesPage from "./pages/CategoriesPage";
+import ContactPage from "./pages/ContactPage";
 import CheckoutPage from "./pages/CheckoutPage";
-import OrderSuccess from "./pages/OrderSuccessPage";
-import ProductDetails from "./pages/ProductDetails";
+import OrderSuccessPage from "./pages/OrderSuccessPage";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import OrdersPage from "./pages/OrdersPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -29,11 +29,11 @@ const App = () => {
       >
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<ProductPage />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/products/:id" element={<ProductDetailsPage />} />
+        <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/order-success" element={<OrderSuccess />} />
+        <Route path="/order-success" element={<OrderSuccessPage />} />
         <Route path="/orders" element={<OrdersPage />} />
       </Route>
 

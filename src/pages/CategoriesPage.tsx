@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 const API_URL = import.meta.env.VITE_API_URL;
-const Categories = () => {
+const CategoriesPage = () => {
   const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
@@ -51,4 +51,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default CategoriesPage;

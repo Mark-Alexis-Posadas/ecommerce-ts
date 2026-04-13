@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { Product } from "../types/product";
 import { useCart } from "../hooks/useCart";
 const API_URL = import.meta.env.VITE_API_URL;
-const ProductDetails = () => {
+const ProductDetailsPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const { addToCart } = useCart();
@@ -51,4 +51,4 @@ const ProductDetails = () => {
   );
 };
 
-export default ProductDetails;
+export default ProductDetailsPage;
