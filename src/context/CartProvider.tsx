@@ -9,7 +9,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const addToCart = async (product: Product) => {
     try {
-      const token = localStorage.getItem("token"); // or kung saan mo store
+      const token = localStorage.getItem("token");
 
       if (!token) {
         console.log("No token");
@@ -18,7 +18,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
       const res = await cartAPI.addToCart(product._id, 1, token);
 
-      // 🔥 gamitin response para i-update state
       setCartItems(
         res.data.items.map((item: any) => ({
           ...item.product,
