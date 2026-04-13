@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { CartContext } from "./CartContext";
 import type { CartItem, Product, CartItemFromAPI } from "../types/product";
 import * as cartAPI from "../services/cartService";
+import { mapCartItems } from "../utils/cartMapper";
 import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -19,12 +20,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
       const res = await cartAPI.addToCart(product._id, 1, token);
 
-      setCartItems(
-        res.data.items.map((item: CartItemFromAPI) => ({
-          ...item.product,
-          quantity: item.quantity,
-        })),
-      );
+      setCartItems(mapCartItems(res.data.items));
     } catch (error) {
       console.error("Add to cart failed", error);
     }
@@ -44,12 +40,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       );
 
       // ✅ update state
-      setCartItems(
-        res.data.items.map((item: CartItemFromAPI) => ({
-          ...item.product,
-          quantity: item.quantity,
-        })),
-      );
+      setCartItems(mapCartItems(res.data.items));
     } catch (error) {
       console.error("Increment failed", error);
     }
@@ -69,12 +60,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       );
 
       // ✅ update state
-      setCartItems(
-        res.data.items.map((item: CartItemFromAPI) => ({
-          ...item.product,
-          quantity: item.quantity,
-        })),
-      );
+      setCartItems(mapCartItems(res.data.items));
     } catch (error) {
       console.error("Decrement failed", error);
     }
@@ -89,12 +75,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setCartItems(
-        res.data.items.map((item: CartItemFromAPI) => ({
-          ...item.product,
-          quantity: item.quantity,
-        })),
-      );
+      setCartItems(mapCartItems(res.data.items));
     } catch (error) {
       console.error("Remove from cart failed", error);
     }
