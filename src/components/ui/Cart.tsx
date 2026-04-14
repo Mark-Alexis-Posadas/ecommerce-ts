@@ -11,7 +11,7 @@ type CartProps = {
 };
 
 const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
-  const { incrementQty, decrementQty, removeFromCart } = useCart();
+  const { incrementQty, decrementQty, removeFromCart, clearCart } = useCart();
 
   console.log(cartItems);
   const total = cartItems.reduce(
@@ -132,6 +132,19 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
                   {formatCurrency(total)}
                 </span>
               </div>
+
+              {cartItems.length > 1 && (
+                <button
+                  onClick={() => {
+                    if (confirm("Clear all items in cart?")) {
+                      clearCart();
+                    }
+                  }}
+                  className="w-full mb-3 border border-red-500 text-red-400 p-2 rounded-xl hover:bg-red-500/10 transition"
+                >
+                  Clear Cart
+                </button>
+              )}
 
               <Link
                 to="/checkout"

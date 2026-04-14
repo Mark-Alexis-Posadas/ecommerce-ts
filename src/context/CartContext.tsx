@@ -7,6 +7,7 @@ export type CartContextType = {
   incrementQty: (id: string) => void;
   decrementQty: (id: string) => void;
   removeFromCart: (id: string) => void;
+  clearCart: () => void;
 };
 
 export const CartContext = createContext<CartContextType | null>(null);

@@ -81,6 +81,22 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const clearCart = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      await axios.delete(`${API_URL}/api/cart`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // 🔥 important: clear frontend state
+      setCartItems([]);
+    } catch (error) {
+      console.error("Clear cart failed", error);
+    }
+  };
+
   useEffect(() => {
     const fetchCart = async () => {
       try {
@@ -111,6 +127,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         incrementQty,
         decrementQty,
         removeFromCart,
+        clearCart,
       }}
     >
       {children}
