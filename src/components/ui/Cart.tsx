@@ -123,6 +123,7 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
           </div>
 
           {/* Footer */}
+          {/* Footer */}
           {cartItems.length > 0 && (
             <div className="border-t border-white/10 p-5">
               <div className="flex justify-between mb-4">
@@ -131,6 +132,15 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
                   {formatCurrency(total)}
                 </span>
               </div>
+
+              {/* 👉 View Cart Button */}
+              <Link
+                to="/cart"
+                onClick={onClose}
+                className="w-full mb-3 border border-indigo-500 text-indigo-400 p-3 rounded-xl hover:bg-indigo-500/10 transition text-center block font-medium"
+              >
+                View My Cart 🛒
+              </Link>
 
               {cartItems.length > 1 && (
                 <button
