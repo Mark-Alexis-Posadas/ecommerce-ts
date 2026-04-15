@@ -14,6 +14,7 @@ import OrderSuccessPage from "./pages/OrderSuccessPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import OrdersPage from "./pages/OrdersPage";
+import OrderDetailsPage from "./pages/OrderDetailsPage";
 import RegisterPage from "./pages/RegisterPage";
 
 const App = () => {
@@ -33,8 +34,9 @@ const App = () => {
         <Route path="/categories" element={<CategoriesPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/order-success" element={<OrderSuccessPage />} />
+        <Route path="/order-success/:id" element={<OrderSuccessPage />} />
         <Route path="/orders" element={<OrdersPage />} />
+        <Route path="/orders/:id" element={<OrderDetailsPage />} />
       </Route>
 
       {/* AUTH */}
