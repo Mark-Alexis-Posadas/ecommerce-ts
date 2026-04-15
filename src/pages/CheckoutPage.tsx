@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { createOrder } from "../services/orderService";
 import { useCart } from "../hooks/useCart";
 import { useAuth } from "../hooks/useAuth";
+import { checkoutSchema } from "../validators/checkoutSchema";
 
 const CheckoutPage = () => {
+  const [errors, setErrors] = useState<any>({});
   const { cartItems } = useCart();
   const [shipping, setShipping] = useState({
     firstName: "",
@@ -25,20 +27,29 @@ const CheckoutPage = () => {
 
   const handlePlaceOrder = async () => {
     try {
+      const formData = {
+        ...shipping,
+        paymentMethod,
+      };
+
+      const result = checkoutSchema.safeParse(formData);
+
+      if (!result.success) {
+        const fieldErrors = result.error.flatten().fieldErrors;
+        setErrors(fieldErrors);
+        return;
+      }
+
+      // clear errors if valid
+      setErrors({});
+
       const orderData = {
         shippingAddress: shipping,
         paymentMethod,
       };
 
-      console.log("📦 Sending Order Data:", orderData);
-
       const res = await createOrder(orderData, user.token);
-
-      console.log("✅ API Response:", res);
-
       const createdOrder = res.data;
-
-      console.log("🎉 Created Order:", createdOrder);
 
       navigate(`/orders/${createdOrder._id}`);
     } catch (err) {
@@ -58,54 +69,115 @@ const CheckoutPage = () => {
             <h2 className="text-xl font-semibold mb-4">Shipping Information</h2>
 
             <div className="grid md:grid-cols-2 gap-4">
-              <input
-                onChange={(e) =>
-                  setShipping({ ...shipping, firstName: e.target.value })
-                }
-                value={shipping.firstName}
-                className="p-3 rounded-lg bg-black/40 border border-white/10"
-                placeholder="First Name"
-              />
-              <input
-                onChange={(e) =>
-                  setShipping({ ...shipping, lastName: e.target.value })
-                }
-                value={shipping.lastName}
-                className="p-3 rounded-lg bg-black/40 border border-white/10"
-                placeholder="Last Name"
-              />
-              <input
-                onChange={(e) =>
-                  setShipping({ ...shipping, address: e.target.value })
-                }
-                value={shipping.address}
-                className="p-3 rounded-lg bg-black/40 border border-white/10 md:col-span-2"
-                placeholder="Address"
-              />
-              <input
-                onChange={(e) =>
-                  setShipping({ ...shipping, city: e.target.value })
-                }
-                value={shipping.city}
-                className="p-3 rounded-lg bg-black/40 border border-white/10"
-                placeholder="City"
-              />
-              <input
-                onChange={(e) =>
-                  setShipping({ ...shipping, postalCode: e.target.value })
-                }
-                value={shipping.postalCode}
-                className="p-3 rounded-lg bg-black/40 border border-white/10"
-                placeholder="Postal Code"
-              />
-              <input
-                onChange={(e) =>
-                  setShipping({ ...shipping, phone: e.target.value })
-                }
-                value={shipping.phone}
-                className="p-3 rounded-lg bg-black/40 border border-white/10 md:col-span-2"
-                placeholder="Phone Number"
-              />
+              {/* FIRST NAME */}
+              <div className="flex flex-col">
+                <input
+                  onChange={(e) =>
+                    setShipping({ ...shipping, firstName: e.target.value })
+                  }
+                  value={shipping.firstName}
+                  className={`p-3 rounded-lg bg-black/40 border ${
+                    errors.firstName ? "border-red-500" : "border-white/10"
+                  }`}
+                  placeholder="First Name"
+                />
+                {errors.firstName && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.firstName[0]}
+                  </p>
+                )}
+              </div>
+
+              {/* LAST NAME */}
+              <div className="flex flex-col">
+                <input
+                  onChange={(e) =>
+                    setShipping({ ...shipping, lastName: e.target.value })
+                  }
+                  value={shipping.lastName}
+                  className={`p-3 rounded-lg bg-black/40 border ${
+                    errors.lastName ? "border-red-500" : "border-white/10"
+                  }`}
+                  placeholder="Last Name"
+                />
+                {errors.lastName && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.lastName[0]}
+                  </p>
+                )}
+              </div>
+
+              {/* ADDRESS (FULL WIDTH) */}
+              <div className="flex flex-col md:col-span-2">
+                <input
+                  onChange={(e) =>
+                    setShipping({ ...shipping, address: e.target.value })
+                  }
+                  value={shipping.address}
+                  className={`p-3 rounded-lg bg-black/40 border ${
+                    errors.address ? "border-red-500" : "border-white/10"
+                  }`}
+                  placeholder="Address"
+                />
+                {errors.address && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.address[0]}
+                  </p>
+                )}
+              </div>
+
+              {/* CITY */}
+              <div className="flex flex-col">
+                <input
+                  onChange={(e) =>
+                    setShipping({ ...shipping, city: e.target.value })
+                  }
+                  value={shipping.city}
+                  className={`p-3 rounded-lg bg-black/40 border ${
+                    errors.city ? "border-red-500" : "border-white/10"
+                  }`}
+                  placeholder="City"
+                />
+                {errors.city && (
+                  <p className="text-red-500 text-xs mt-1">{errors.city[0]}</p>
+                )}
+              </div>
+
+              {/* POSTAL */}
+              <div className="flex flex-col">
+                <input
+                  onChange={(e) =>
+                    setShipping({ ...shipping, postalCode: e.target.value })
+                  }
+                  value={shipping.postalCode}
+                  className={`p-3 rounded-lg bg-black/40 border ${
+                    errors.postalCode ? "border-red-500" : "border-white/10"
+                  }`}
+                  placeholder="Postal Code"
+                />
+                {errors.postalCode && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.postalCode[0]}
+                  </p>
+                )}
+              </div>
+
+              {/* PHONE (FULL WIDTH) */}
+              <div className="flex flex-col md:col-span-2">
+                <input
+                  onChange={(e) =>
+                    setShipping({ ...shipping, phone: e.target.value })
+                  }
+                  value={shipping.phone}
+                  className={`p-3 rounded-lg bg-black/40 border ${
+                    errors.phone ? "border-red-500" : "border-white/10"
+                  }`}
+                  placeholder="Phone Number"
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-xs mt-1">{errors.phone[0]}</p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -116,6 +188,9 @@ const CheckoutPage = () => {
             <div className="space-y-3">
               <label className="flex items-center gap-3">
                 <input
+                  className={`space-y-3 p-3 rounded-lg ${
+                    errors.paymentMethod ? "border border-red-500" : ""
+                  }`}
                   type="radio"
                   name="payment"
                   value="COD"
@@ -123,9 +198,17 @@ const CheckoutPage = () => {
                 />
                 Cash on Delivery Cash on Delivery
               </label>
+              {errors.paymentMethod && (
+                <p className="text-red-500 text-xs">
+                  {errors.paymentMethod[0]}
+                </p>
+              )}
 
               <label className="flex items-center gap-3">
                 <input
+                  className={`space-y-3 p-3 rounded-lg ${
+                    errors.paymentMethod ? "border border-red-500" : ""
+                  }`}
                   type="radio"
                   name="payment"
                   value="CARD"
@@ -133,9 +216,17 @@ const CheckoutPage = () => {
                 />
                 Credit / Debit Card Credit / Debit Card
               </label>
+              {errors.paymentMethod && (
+                <p className="text-red-500 text-xs">
+                  {errors.paymentMethod[0]}
+                </p>
+              )}
 
               <label className="flex items-center gap-3">
                 <input
+                  className={`space-y-3 p-3 rounded-lg ${
+                    errors.paymentMethod ? "border border-red-500" : ""
+                  }`}
                   type="radio"
                   name="payment"
                   value="GCASH"
@@ -143,6 +234,11 @@ const CheckoutPage = () => {
                 />
                 GCash GCash
               </label>
+              {errors.paymentMethod && (
+                <p className="text-red-500 text-xs">
+                  {errors.paymentMethod[0]}
+                </p>
+              )}
             </div>
           </div>
         </div>
