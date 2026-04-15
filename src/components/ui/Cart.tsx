@@ -13,7 +13,6 @@ type CartProps = {
 const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
   const { incrementQty, decrementQty, removeFromCart, clearCart } = useCart();
 
-  console.log(cartItems);
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
