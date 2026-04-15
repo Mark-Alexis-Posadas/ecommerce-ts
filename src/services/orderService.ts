@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "/api/orders";
+const API = "http://localhost:5000/api/orders";
 
 export const createOrder = async (orderData: any, token: string) => {
   return axios.post(API, orderData, {
