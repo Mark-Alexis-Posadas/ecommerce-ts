@@ -1,15 +1,38 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Cart from "../ui/Cart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useCart } from "../../hooks/useCart";
 
+const API_URL = "http://localhost:5000/api/auth";
 const Navbar = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const { cartItems } = useCart();
   const token = localStorage.getItem("token");
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        `${API_URL}/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+  };
   return (
     <>
       <nav className="sticky top-0 z-50 backdrop-blur-xl bg-black/40 border-b border-white/10 mb-5">
@@ -90,11 +113,8 @@ const Navbar = () => {
 
                 {/* Logout */}
                 <button
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                    window.location.reload();
-                  }}
-                  className="text-sm text-red-400"
+                  onClick={handleLogout}
+                  className="text-sm text-red-400 hover:text-red-500 transition"
                 >
                   Logout
                 </button>
