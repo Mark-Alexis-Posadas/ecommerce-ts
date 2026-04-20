@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { createOrder } from "../services/orderService";
 import { useCart } from "../hooks/useCart";
@@ -37,6 +38,8 @@ const CheckoutPage = () => {
       if (!result.success) {
         const fieldErrors = result.error.flatten().fieldErrors;
         setErrors(fieldErrors);
+        toast.error("Please fill in all required fields properly");
+
         return;
       }
 
@@ -50,9 +53,11 @@ const CheckoutPage = () => {
 
       const res = await createOrder(orderData, user.token);
       const createdOrder = res.data;
+      toast.success("Order placed successfully!");
 
       navigate(`/orders/${createdOrder._id}`);
     } catch (err) {
+      toast.error("Something went wrong. Please try again.");
       console.error("❌ Error creating order:", err);
     }
   };
