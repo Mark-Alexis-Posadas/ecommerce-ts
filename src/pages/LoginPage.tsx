@@ -20,8 +20,25 @@ const LoginPage = () => {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
 
+    // 🔒 1. Client-side validation
+    if (!email || !password) {
+      toast.error("Email and password are required");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Invalid email format");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    setLoading(true);
     const loadingToast = toast.loading("Logging in...");
 
     try {
@@ -30,24 +47,26 @@ const LoginPage = () => {
         password,
       });
 
-      console.log("LOGIN RESPONSE:", res.data);
-
-      const token: string | undefined = res.data?.token;
+      const { token, _id, name } = res.data;
 
       if (!token) {
         toast.dismiss(loadingToast);
         toast.error("No token received ❌");
         return;
       }
-      // 🔥 SAVE TOKEN
+
+      // 🔥 Save auth data
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("user", JSON.stringify({ _id, name, email }));
+
       toast.dismiss(loadingToast);
       toast.success("Login successful 🎉");
+
+      // ✅ FIXED: single navigate only
       navigate("/", { replace: true });
-      // redirect
-      navigate("/");
     } catch (error: unknown) {
+      toast.dismiss(loadingToast);
+
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data?.message || "Login failed ❌");
       } else {
