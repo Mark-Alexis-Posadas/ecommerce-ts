@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-
-const API_URL = "http://localhost:5000/api/auth";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,7 +34,7 @@ const RegisterPage = () => {
     const loadingToast = toast.loading("Creating account...");
 
     try {
-      const res = await axios.post(`${API_URL}/signup`, {
+      const res = await axios.post(`${API_URL}/api/auth/signup`, {
         name,
         email,
         password,

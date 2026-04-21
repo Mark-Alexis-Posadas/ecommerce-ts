@@ -39,7 +39,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         },
       );
 
-      // ✅ update state
       setCartItems(mapCartItems(res.data.items));
     } catch (error) {
       console.error("Increment failed", error);
@@ -59,7 +58,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         },
       );
 
-      // ✅ update state
       setCartItems(mapCartItems(res.data.items));
     } catch (error) {
       console.error("Decrement failed", error);

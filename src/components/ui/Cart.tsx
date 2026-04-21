@@ -123,7 +123,6 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
           </div>
 
           {/* Footer */}
-          {/* Footer */}
           {cartItems.length > 0 && (
             <div className="border-t border-white/10 p-5">
               <div className="flex justify-between mb-4">
@@ -133,7 +132,6 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
                 </span>
               </div>
 
-              {/* 👉 View Cart Button */}
               <Link
                 to="/cart"
                 onClick={onClose}

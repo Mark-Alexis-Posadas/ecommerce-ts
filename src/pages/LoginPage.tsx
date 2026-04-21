@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-
-const API_URL = "http://localhost:5000/api/auth";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +20,6 @@ const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 🔒 1. Client-side validation
     if (!email || !password) {
       toast.error("Email and password are required");
       return;
@@ -42,12 +40,13 @@ const LoginPage = () => {
     const loadingToast = toast.loading("Logging in...");
 
     try {
-      const res = await axios.post(`${API_URL}/login`, {
+      const res = await axios.post(`${API_URL}/api/auth/login`, {
         email,
         password,
       });
 
       const { token, _id, name } = res.data;
+      console.log(token, name);
 
       if (!token) {
         toast.dismiss(loadingToast);
@@ -62,7 +61,6 @@ const LoginPage = () => {
       toast.dismiss(loadingToast);
       toast.success("Login successful 🎉");
 
-      // ✅ FIXED: single navigate only
       navigate("/", { replace: true });
     } catch (error: unknown) {
       toast.dismiss(loadingToast);
