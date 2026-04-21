@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const FlashSale: React.FC = () => {
-  const [timeLeft, setTimeLeft] = useState(3600); // 1 hour
+  const [timeLeft, setTimeLeft] = useState(3600);
 
   useEffect(() => {
     const timer = setInterval(() => {
