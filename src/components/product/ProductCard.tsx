@@ -11,7 +11,7 @@ const ProductCard = ({ product }: Props) => {
   const { cartItems, addToCart, incrementQty, decrementQty } = useCart();
 
   const cartItem = cartItems.find((item) => item._id === product._id);
-
+  const isOutOfStock = product.stock === 0;
   return (
     <div className="group relative rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-indigo-500/40 transition-all duration-300 hover:-translate-y-3">
       <Link to={`/products/${product._id}`}>
@@ -39,13 +39,18 @@ const ProductCard = ({ product }: Props) => {
       <div className="p-5 pt-0 text-white">
         {!cartItem ? (
           <button
+            disabled={isOutOfStock}
             onClick={(e) => {
               e.stopPropagation(); // extra safety
               addToCart(product);
             }}
-            className="mt-5 w-full rounded-xl bg-indigo-600 py-3 font-bold"
+            className={`mt-5  w-full py-3 rounded-xl font-bold transition ${
+              isOutOfStock
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-500"
+            }`}
           >
-            Add to Cart
+            {isOutOfStock ? "Out of Stock" : "Add to Cart"}
           </button>
         ) : (
           <div className="mt-5 flex items-center justify-between bg-indigo-600 rounded-xl p-2">
