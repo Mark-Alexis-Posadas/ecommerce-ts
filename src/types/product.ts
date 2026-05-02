@@ -3,14 +3,22 @@ export type Rating = {
   count: number;
 };
 
+export type Category = {
+  _id: string;
+  name: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 export type Product = {
   _id: string;
   title: string;
   price: number;
-  category: string;
-  image: string;
+  category: Category;
+  images: string[];
   description: string;
   rating: Rating;
+  stock: number;
   createdAt: string;
 };
 

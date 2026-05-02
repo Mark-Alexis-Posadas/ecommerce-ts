@@ -3,6 +3,7 @@ import type { Product } from "../../types/product";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+
 type Props = {
   product: Product;
 };
@@ -12,12 +13,13 @@ const ProductCard = ({ product }: Props) => {
 
   const cartItem = cartItems.find((item) => item._id === product._id);
   const isOutOfStock = product.stock === 0;
+
   return (
     <div className="group relative rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-indigo-500/40 transition-all duration-300 hover:-translate-y-3">
       <Link to={`/products/${product._id}`}>
         <div className="h-48 flex items-center justify-center bg-white p-4 rounded-t-2xl">
           <img
-            src={product.image}
+            src={product.images?.[0] || "/placeholder.png"}
             alt={product.title}
             className="h-full object-contain"
           />
@@ -25,7 +27,10 @@ const ProductCard = ({ product }: Props) => {
 
         <div className="p-5 text-white">
           <h3 className="text-lg font-bold line-clamp-1">{product.title}</h3>
-          <p className="text-sm text-gray-300 capitalize">{product.category}</p>
+
+          <p className="text-sm text-gray-300 capitalize">
+            {product.category?.name || "No Category"}
+          </p>
 
           <div className="mt-4 flex items-center justify-between">
             <span className="text-2xl font-extrabold text-indigo-400">
@@ -41,10 +46,10 @@ const ProductCard = ({ product }: Props) => {
           <button
             disabled={isOutOfStock}
             onClick={(e) => {
-              e.stopPropagation(); // extra safety
+              e.stopPropagation();
               addToCart(product);
             }}
-            className={`mt-5  w-full py-3 rounded-xl font-bold transition ${
+            className={`mt-5 w-full py-3 rounded-xl font-bold transition ${
               isOutOfStock
                 ? "bg-gray-500 cursor-not-allowed"
                 : "bg-indigo-600 hover:bg-indigo-500"
