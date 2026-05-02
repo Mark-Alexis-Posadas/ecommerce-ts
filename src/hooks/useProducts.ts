@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import type { Product } from "../types/product";
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -10,14 +11,8 @@ const useProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/products`);
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch");
-        }
-
-        const data: Product[] = await res.json();
-        setProducts(data.data);
+        const response = await axios.get(`${API_URL}/api/products`);
+        setProducts(response.data.data);
       } catch (error) {
         setError("Failed to fetch products");
         console.error(error);
