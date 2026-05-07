@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/useAuth";
 import { checkoutSchema } from "../validators/checkoutSchema";
 
 const CheckoutPage = () => {
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<Record<string, string[]>>({});
   const { cartItems } = useCart();
   const [shipping, setShipping] = useState({
     firstName: "",
@@ -260,7 +260,7 @@ const CheckoutPage = () => {
               >
                 {/* IMAGE */}
                 <img
-                  src={item.image}
+                  src={item.images[0]}
                   alt={item.title}
                   className="w-16 h-16 object-contain bg-white rounded-lg p-2"
                 />
