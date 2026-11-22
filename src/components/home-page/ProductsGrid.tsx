@@ -1,24 +1,22 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState } from 'react';
 
-import ProductCard from "../product/ProductCard";
-import Section from "../layout/Section";
-import Container from "../layout/Container";
-import type { ProductProps } from "../../types/product";
+import ProductCard from '../product/ProductCard';
+import Section from '../layout/Section';
+import Container from '../layout/Container';
+import type { ProductProps } from '../../types/product';
 
 const ProductsGrid = ({ products, loading, error }: ProductProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortOption, setSortOption] = useState("none");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortOption, setSortOption] = useState('none');
 
   const filteredProducts = useMemo(() => {
     let items = products.filter((p) => {
-      const title = p.title || "";
+      const title = p.title || '';
       return title.toLowerCase().includes(searchQuery.toLowerCase());
     });
-    if (sortOption === "low_to_high")
-      items = [...items].sort((a, b) => a.price - b.price);
-    if (sortOption === "high_to_low")
-      items = [...items].sort((a, b) => b.price - a.price);
-    if (sortOption === "top_rated")
+    if (sortOption === 'low_to_high') items = [...items].sort((a, b) => a.price - b.price);
+    if (sortOption === 'high_to_low') items = [...items].sort((a, b) => b.price - a.price);
+    if (sortOption === 'top_rated')
       items = [...items].sort((a, b) => b.rating.rate - a.rating.rate);
 
     return items;

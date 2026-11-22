@@ -1,15 +1,25 @@
-import {formatCentavos} from "../utils/cartMoney";
-import {CartFeedback,CartLineIssues} from "../components/cart/CartFeedback";
-import {productPlaceholder} from "../utils/productImage";
-import { Link, useNavigate } from "react-router-dom";
-import { useCart } from "../hooks/useCart";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { formatCentavos } from '../utils/cartMoney';
+import { CartFeedback, CartLineIssues } from '../components/cart/CartFeedback';
+import { productPlaceholder } from '../utils/productImage';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../hooks/useCart';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const { cartItems, incrementQty, decrementQty, removeFromCart, clearCart, subtotalCentavos, totalQuantity, checkoutEligible, loading, pending } =
-    useCart();
+  const {
+    cartItems,
+    incrementQty,
+    decrementQty,
+    removeFromCart,
+    clearCart,
+    subtotalCentavos,
+    totalQuantity,
+    checkoutEligible,
+    loading,
+    pending,
+  } = useCart();
 
   return (
     <div className="min-h-screen px-6 md:px-10 py-12 max-w-6xl mx-auto text-white">
@@ -41,14 +51,12 @@ const CartPage = () => {
 
                 {/* INFO */}
                 <div className="flex flex-col flex-1">
-                  <h2 className="font-semibold text-lg line-clamp-1">
-                    {item.title}
-                  </h2>
+                  <h2 className="font-semibold text-lg line-clamp-1">{item.title}</h2>
 
                   <p className="text-sm text-gray-400 capitalize">
-                    {typeof item.category === "string"
+                    {typeof item.category === 'string'
                       ? item.category
-                      : item.category?.name || "No Category"}
+                      : item.category?.name || 'No Category'}
                   </p>
 
                   <p className="text-xs text-gray-500 mt-1">
@@ -60,7 +68,7 @@ const CartPage = () => {
                   <div className="flex items-center gap-2 mt-4">
                     <button
                       disabled={pending || loading}
-                      aria-label={"Decrease quantity of " + item.title}
+                      aria-label={'Decrease quantity of ' + item.title}
                       onClick={() => decrementQty(item._id)}
                       className="w-8 h-8 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 active:scale-90 transition rounded"
                     >
@@ -70,8 +78,13 @@ const CartPage = () => {
                     <span className="w-6 text-center">{item.quantity}</span>
 
                     <button
-                      disabled={pending || loading || !item.available || item.quantity >= item.availableStock}
-                      aria-label={"Increase quantity of " + item.title}
+                      disabled={
+                        pending ||
+                        loading ||
+                        !item.available ||
+                        item.quantity >= item.availableStock
+                      }
+                      aria-label={'Increase quantity of ' + item.title}
                       onClick={() => incrementQty(item._id)}
                       className="w-8 h-8 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 active:scale-90 transition rounded"
                     >
@@ -82,8 +95,8 @@ const CartPage = () => {
                   {/* REMOVE */}
                   <button
                     disabled={pending || loading}
-                      aria-label={"Remove " + item.title}
-                      onClick={() => removeFromCart(item._id)}
+                    aria-label={'Remove ' + item.title}
+                    onClick={() => removeFromCart(item._id)}
                     className="text-red-400 text-sm mt-3 hover:underline"
                   >
                     <FontAwesomeIcon icon={faTrash} /> Remove
@@ -120,12 +133,14 @@ const CartPage = () => {
               </span>
             </div>
 
-            {!checkoutEligible && !loading && !pending && <p className="mb-3 text-sm text-amber-300">Review the cart issues before checkout.</p>}
+            {!checkoutEligible && !loading && !pending && (
+              <p className="mb-3 text-sm text-amber-300">Review the cart issues before checkout.</p>
+            )}
             {/* ACTIONS */}
             <div className="flex flex-col gap-3 mt-6">
               <button
                 disabled={!checkoutEligible || pending || loading}
-                onClick={() => navigate("/checkout")}
+                onClick={() => navigate('/checkout')}
                 className="w-full disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 p-3 rounded-xl text-center font-semibold hover:bg-indigo-500 active:scale-95 transition"
               >
                 Proceed to Checkout
@@ -135,7 +150,7 @@ const CartPage = () => {
                 <button
                   disabled={pending || loading}
                   onClick={() => {
-                    if (!pending && confirm("Clear all items in cart?")) {
+                    if (!pending && confirm('Clear all items in cart?')) {
                       clearCart();
                     }
                   }}

@@ -1,34 +1,35 @@
-import axios from "axios";
-import {CartFeedback,CartLineIssues} from "../components/cart/CartFeedback";
-import {formatCentavos} from "../utils/cartMoney";
-import {productPlaceholder} from "../utils/productImage";
-import { useState, useRef } from "react";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import { createOrder } from "../services/orderService";
-import { useCart } from "../hooks/useCart";
-import { useAuth } from "../hooks/useAuth";
-import { checkoutSchema } from "../validators/checkoutSchema";
+import axios from 'axios';
+import { CartFeedback, CartLineIssues } from '../components/cart/CartFeedback';
+import { formatCentavos } from '../utils/cartMoney';
+import { productPlaceholder } from '../utils/productImage';
+import { useState, useRef } from 'react';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { createOrder } from '../services/orderService';
+import { useCart } from '../hooks/useCart';
+import { useAuth } from '../hooks/useAuth';
+import { checkoutSchema } from '../validators/checkoutSchema';
 
 const CheckoutPage = () => {
   const [errors, setErrors] = useState<Record<string, string[]>>({});
-  const { cartItems, subtotalCentavos, checkoutEligible, loading, pending, refreshCart } = useCart();
-  const [placing,setPlacing]=useState(false);
-  const submitting=useRef(false);
+  const { cartItems, subtotalCentavos, checkoutEligible, loading, pending, refreshCart } =
+    useCart();
+  const [placing, setPlacing] = useState(false);
+  const submitting = useRef(false);
   const [shipping, setShipping] = useState({
-    firstName: "",
-    lastName: "",
-    address: "",
-    city: "",
-    postalCode: "",
-    phone: "",
+    firstName: '',
+    lastName: '',
+    address: '',
+    city: '',
+    postalCode: '',
+    phone: '',
   });
   const { token } = useAuth();
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState('');
   const navigate = useNavigate();
 
   const handlePlaceOrder = async () => {
-    if(submitting.current || !checkoutEligible || loading || pending)return;
+    if (submitting.current || !checkoutEligible || loading || pending) return;
     try {
       const formData = {
         ...shipping,
@@ -40,7 +41,7 @@ const CheckoutPage = () => {
       if (!result.success) {
         const fieldErrors = result.error.flatten().fieldErrors;
         setErrors(fieldErrors);
-        toast.error("Please fill in all required fields properly");
+        toast.error('Please fill in all required fields properly');
 
         return;
       }
@@ -50,22 +51,31 @@ const CheckoutPage = () => {
 
       const orderData = {
         shippingAddress: shipping,
-        paymentMethod,
+        paymentMethod: result.data.paymentMethod,
       };
 
-      submitting.current=true;setPlacing(true);
+      submitting.current = true;
+      setPlacing(true);
       const res = await createOrder(orderData, token!);
       const createdOrder = res.data;
-      toast.success("Order placed successfully!");
-      if(createdOrder.cartClearConflict)toast.error("Your cart changed during checkout. Review remaining items before ordering again.");
+      toast.success('Order placed successfully!');
+      if (createdOrder.cartClearConflict)
+        toast.error(
+          'Your cart changed during checkout. Review remaining items before ordering again.',
+        );
       await refreshCart();
 
       navigate(`/orders/${createdOrder._id}`);
     } catch (error) {
-      const message=axios.isAxiosError<{message?:string}>(error)?error.response?.data?.message:undefined;
-      toast.error(message||"Unable to place order. Please review your cart.");
+      const message = axios.isAxiosError<{ message?: string }>(error)
+        ? error.response?.data?.message
+        : undefined;
+      toast.error(message || 'Unable to place order. Please review your cart.');
       await refreshCart();
-    } finally {submitting.current=false;setPlacing(false);}
+    } finally {
+      submitting.current = false;
+      setPlacing(false);
+    }
   };
 
   return (
@@ -73,7 +83,14 @@ const CheckoutPage = () => {
       <h1 className="text-4xl font-bold mb-10">Checkout</h1>
 
       <CartFeedback />
-      {!checkoutEligible && !loading && <p className="mb-4 text-amber-300">Review your cart before placing an order. <a href="/cart" className="underline">Return to cart</a></p>}
+      {!checkoutEligible && !loading && (
+        <p className="mb-4 text-amber-300">
+          Review your cart before placing an order.{' '}
+          <a href="/cart" className="underline">
+            Return to cart
+          </a>
+        </p>
+      )}
       <div className="grid md:grid-cols-3 gap-10">
         {/* LEFT SIDE */}
         <div className="md:col-span-2 space-y-8">
@@ -85,111 +102,85 @@ const CheckoutPage = () => {
               {/* FIRST NAME */}
               <div className="flex flex-col">
                 <input
-                  onChange={(e) =>
-                    setShipping({ ...shipping, firstName: e.target.value })
-                  }
+                  onChange={(e) => setShipping({ ...shipping, firstName: e.target.value })}
                   value={shipping.firstName}
                   className={`p-3 rounded-lg bg-black/40 border ${
-                    errors.firstName ? "border-red-500" : "border-white/10"
+                    errors.firstName ? 'border-red-500' : 'border-white/10'
                   }`}
                   placeholder="First Name"
                 />
                 {errors.firstName && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.firstName[0]}
-                  </p>
+                  <p className="text-red-500 text-xs mt-1">{errors.firstName[0]}</p>
                 )}
               </div>
 
               {/* LAST NAME */}
               <div className="flex flex-col">
                 <input
-                  onChange={(e) =>
-                    setShipping({ ...shipping, lastName: e.target.value })
-                  }
+                  onChange={(e) => setShipping({ ...shipping, lastName: e.target.value })}
                   value={shipping.lastName}
                   className={`p-3 rounded-lg bg-black/40 border ${
-                    errors.lastName ? "border-red-500" : "border-white/10"
+                    errors.lastName ? 'border-red-500' : 'border-white/10'
                   }`}
                   placeholder="Last Name"
                 />
                 {errors.lastName && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.lastName[0]}
-                  </p>
+                  <p className="text-red-500 text-xs mt-1">{errors.lastName[0]}</p>
                 )}
               </div>
 
               {/* ADDRESS (FULL WIDTH) */}
               <div className="flex flex-col md:col-span-2">
                 <input
-                  onChange={(e) =>
-                    setShipping({ ...shipping, address: e.target.value })
-                  }
+                  onChange={(e) => setShipping({ ...shipping, address: e.target.value })}
                   value={shipping.address}
                   className={`p-3 rounded-lg bg-black/40 border ${
-                    errors.address ? "border-red-500" : "border-white/10"
+                    errors.address ? 'border-red-500' : 'border-white/10'
                   }`}
                   placeholder="Address"
                 />
-                {errors.address && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.address[0]}
-                  </p>
-                )}
+                {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address[0]}</p>}
               </div>
 
               {/* CITY */}
               <div className="flex flex-col">
                 <input
-                  onChange={(e) =>
-                    setShipping({ ...shipping, city: e.target.value })
-                  }
+                  onChange={(e) => setShipping({ ...shipping, city: e.target.value })}
                   value={shipping.city}
                   className={`p-3 rounded-lg bg-black/40 border ${
-                    errors.city ? "border-red-500" : "border-white/10"
+                    errors.city ? 'border-red-500' : 'border-white/10'
                   }`}
                   placeholder="City"
                 />
-                {errors.city && (
-                  <p className="text-red-500 text-xs mt-1">{errors.city[0]}</p>
-                )}
+                {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city[0]}</p>}
               </div>
 
               {/* POSTAL */}
               <div className="flex flex-col">
                 <input
-                  onChange={(e) =>
-                    setShipping({ ...shipping, postalCode: e.target.value })
-                  }
+                  onChange={(e) => setShipping({ ...shipping, postalCode: e.target.value })}
                   value={shipping.postalCode}
                   className={`p-3 rounded-lg bg-black/40 border ${
-                    errors.postalCode ? "border-red-500" : "border-white/10"
+                    errors.postalCode ? 'border-red-500' : 'border-white/10'
                   }`}
                   placeholder="Postal Code"
                 />
                 {errors.postalCode && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.postalCode[0]}
-                  </p>
+                  <p className="text-red-500 text-xs mt-1">{errors.postalCode[0]}</p>
                 )}
               </div>
 
               {/* PHONE (FULL WIDTH) */}
               <div className="flex flex-col md:col-span-2">
                 <input
-                  onChange={(e) =>
-                    setShipping({ ...shipping, phone: e.target.value })
-                  }
+                  onChange={(e) => setShipping({ ...shipping, phone: e.target.value })}
                   value={shipping.phone}
                   className={`p-3 rounded-lg bg-black/40 border ${
-                    errors.phone ? "border-red-500" : "border-white/10"
+                    errors.phone ? 'border-red-500' : 'border-white/10'
                   }`}
                   placeholder="Phone Number"
                 />
-                {errors.phone && (
-                  <p className="text-red-500 text-xs mt-1">{errors.phone[0]}</p>
-                )}
+                {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone[0]}</p>}
               </div>
             </div>
           </div>
@@ -202,7 +193,7 @@ const CheckoutPage = () => {
               <label className="flex items-center gap-3">
                 <input
                   className={`space-y-3 p-3 rounded-lg ${
-                    errors.paymentMethod ? "border border-red-500" : ""
+                    errors.paymentMethod ? 'border border-red-500' : ''
                   }`}
                   type="radio"
                   name="payment"
@@ -212,11 +203,8 @@ const CheckoutPage = () => {
                 Cash on Delivery
               </label>
               {errors.paymentMethod && (
-                <p className="text-red-500 text-xs">
-                  {errors.paymentMethod[0]}
-                </p>
+                <p className="text-red-500 text-xs">{errors.paymentMethod[0]}</p>
               )}
-
             </div>
           </div>
         </div>
@@ -250,9 +238,7 @@ const CheckoutPage = () => {
                 </div>
 
                 {/* PRICE */}
-                <p className="text-sm font-bold">
-                  {formatCentavos(item.lineTotalCentavos)}
-                </p>
+                <p className="text-sm font-bold">{formatCentavos(item.lineTotalCentavos)}</p>
               </div>
             ))}
           </div>
@@ -267,7 +253,7 @@ const CheckoutPage = () => {
             disabled={!checkoutEligible || pending || loading || placing}
             onClick={handlePlaceOrder}
           >
-            {placing ? "Placing order..." : "Place Order"}
+            {placing ? 'Placing order...' : 'Place Order'}
           </button>
         </div>
       </div>

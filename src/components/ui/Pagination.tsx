@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 type PaginationProps = {
   currentPage: number;
@@ -6,11 +6,7 @@ type PaginationProps = {
   onPageChange: (page: number) => void;
 };
 
-const Pagination: React.FC<PaginationProps> = ({
-  currentPage,
-  totalPages,
-  onPageChange,
-}) => {
+const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
   if (totalPages <= 1) return null;
 
   return (
@@ -30,9 +26,7 @@ const Pagination: React.FC<PaginationProps> = ({
           key={page}
           onClick={() => onPageChange(page)}
           className={`px-3 py-1 rounded-lg ${
-            currentPage === page
-              ? "bg-indigo-600 text-white"
-              : "bg-white/10 text-gray-300"
+            currentPage === page ? 'bg-indigo-600 text-white' : 'bg-white/10 text-gray-300'
           }`}
         >
           {page}

@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -21,15 +21,14 @@ const CategoriesPage = () => {
         const response = await fetch(`${API_URL}/api/products/categories`);
 
         if (!response.ok) {
-          throw new Error("Failed to fetch categories");
+          throw new Error('Failed to fetch categories');
         }
 
         const data = await response.json();
 
         setCategories(data.data);
-      } catch (error: any) {
-        console.error(error);
-        setError(error.message || "Something went wrong");
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'Something went wrong');
       } finally {
         setLoading(false);
       }
@@ -39,11 +38,7 @@ const CategoriesPage = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="text-center py-20 text-gray-400">
-        Loading categories...
-      </div>
-    );
+    return <div className="text-center py-20 text-gray-400">Loading categories...</div>;
   }
 
   if (error) {
@@ -55,9 +50,7 @@ const CategoriesPage = () => {
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-3">Browse Categories</h1>
-        <p className="text-gray-400">
-          Explore our product collections by category.
-        </p>
+        <p className="text-gray-400">Explore our product collections by category.</p>
       </div>
 
       {/* Category Grid */}
@@ -75,9 +68,7 @@ const CategoriesPage = () => {
               <div className="text-4xl mb-4">📦</div>
 
               {/* Category Name */}
-              <h3 className="text-xl font-bold text-white capitalize">
-                {category.name}
-              </h3>
+              <h3 className="text-xl font-bold text-white capitalize">{category.name}</h3>
             </Link>
           ))}
         </div>

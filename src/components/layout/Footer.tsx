@@ -5,9 +5,7 @@ const Footer = () => {
         {/* Brand */}
         <div>
           <h2 className="text-xl font-bold text-white mb-3">ShopZone</h2>
-          <p className="text-sm">
-            Your trusted online store for quality products and great deals.
-          </p>
+          <p className="text-sm">Your trusted online store for quality products and great deals.</p>
         </div>
 
         {/* Links */}

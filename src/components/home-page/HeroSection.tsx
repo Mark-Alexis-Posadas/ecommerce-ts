@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 const HeroSection: React.FC = () => {
   return (
@@ -8,8 +8,8 @@ const HeroSection: React.FC = () => {
       </h1>
 
       <p className="max-w-2xl mx-auto text-gray-300 text-lg mb-10">
-        Discover premium products crafted to elevate your everyday life. Curated
-        quality. Honest pricing.
+        Discover premium products crafted to elevate your everyday life. Curated quality. Honest
+        pricing.
       </p>
 
       <div className="flex justify-center gap-4">

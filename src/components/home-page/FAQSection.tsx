@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { faqs } from "../../data/faq";
+import { useState } from 'react';
+import { faqs } from '../../data/faq';
 
 const FaqSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -15,9 +15,7 @@ const FaqSection = () => {
         <h2 className="text-3xl lg:text-4xl font-extrabold text-white">
           ❓ Frequently Asked Questions
         </h2>
-        <p className="text-gray-400 mt-2">
-          Everything you need to know before buying
-        </p>
+        <p className="text-gray-400 mt-2">Everything you need to know before buying</p>
       </div>
 
       {/* FAQ LIST */}
@@ -37,11 +35,7 @@ const FaqSection = () => {
               >
                 {faq.question}
 
-                <span
-                  className={`transition-transform duration-300 ${
-                    isOpen ? "rotate-180" : ""
-                  }`}
-                >
+                <span className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
                   ▼
                 </span>
               </button>
@@ -49,7 +43,7 @@ const FaqSection = () => {
               {/* ANSWER */}
               <div
                 className={`overflow-hidden transition-all duration-300 ${
-                  isOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                  isOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
                 }`}
               >
                 <p className="px-5 pb-5 text-gray-300">{faq.answer}</p>

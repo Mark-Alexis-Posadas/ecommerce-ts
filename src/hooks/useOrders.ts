@@ -1,12 +1,12 @@
-import { useState } from "react";
-import type { Order } from "../types/order";
+import { useState } from 'react';
+import type { Order } from '../types/order';
 
 const mockOrders: Order[] = [
   {
-    id: "ORD-001",
+    id: 'ORD-001',
     items: [],
     total: 1200,
-    status: "pending",
+    status: 'pending',
     createdAt: new Date().toISOString(),
   },
 ];

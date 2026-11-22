@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 const FlashSale: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState(3600);

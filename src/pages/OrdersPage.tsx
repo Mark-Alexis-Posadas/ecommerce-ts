@@ -1,4 +1,4 @@
-import useOrders from "../hooks/useOrders";
+import useOrders from '../hooks/useOrders';
 
 const OrdersPage = () => {
   const { orders } = useOrders();
@@ -27,11 +27,11 @@ const OrdersPage = () => {
 
                 <span
                   className={`px-3 py-1 text-xs rounded-full font-semibold ${
-                    order.status === "pending"
-                      ? "bg-yellow-500/20 text-yellow-400"
-                      : order.status === "shipped"
-                        ? "bg-blue-500/20 text-blue-400"
-                        : "bg-green-500/20 text-green-400"
+                    order.status === 'pending'
+                      ? 'bg-yellow-500/20 text-yellow-400'
+                      : order.status === 'shipped'
+                        ? 'bg-blue-500/20 text-blue-400'
+                        : 'bg-green-500/20 text-green-400'
                   }`}
                 >
                   {order.status}
@@ -51,17 +51,13 @@ const OrdersPage = () => {
                     />
 
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-white">
-                        {item.title}
-                      </p>
+                      <p className="text-sm font-semibold text-white">{item.title}</p>
                       <p className="text-xs text-gray-400">
                         {item.quantity} × ₱{item.price}
                       </p>
                     </div>
 
-                    <p className="text-sm font-bold text-white">
-                      ₱{item.price * item.quantity}
-                    </p>
+                    <p className="text-sm font-bold text-white">₱{item.price * item.quantity}</p>
                   </div>
                 ))}
               </div>

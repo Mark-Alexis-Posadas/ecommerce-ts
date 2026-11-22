@@ -1,21 +1,45 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getOrderById } from "../services/orderService";
-import { useAuth } from "../hooks/useAuth";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getOrderById } from '../services/orderService';
+import { useAuth } from '../hooks/useAuth';
+import type { OrderResponse } from '../types/order';
 
 const OrderDetailsPage = () => {
   const { id } = useParams();
   const { token } = useAuth();
-  const [order, setOrder] = useState<any>(null);
+  const [order, setOrder] = useState<OrderResponse | null>(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
+    let active = true;
     const fetchOrder = async () => {
-      const res = await getOrderById(id!, token!);
-      setOrder(res.data);
+      if (!id || !token) return;
+      try {
+        const res = await getOrderById(id, token);
+        if (active) {
+          setOrder(res.data);
+          setError('');
+        }
+      } catch {
+        if (active) {
+          setOrder(null);
+          setError('Unable to load this order. Please try again.');
+        }
+      }
     };
 
-    fetchOrder();
-  }, [id]);
+    void fetchOrder();
+    return () => {
+      active = false;
+    };
+  }, [id, token]);
+
+  if (error)
+    return (
+      <p role="alert" className="p-12 text-center text-red-300">
+        {error}
+      </p>
+    );
 
   if (!order) {
     return (
@@ -43,7 +67,7 @@ const OrderDetailsPage = () => {
               </div>
 
               <span className="px-3 py-1 text-xs rounded-full font-semibold bg-yellow-500/20 text-yellow-400">
-                {order.status || "pending"}
+                pending
               </span>
             </div>
           </div>
@@ -53,9 +77,9 @@ const OrderDetailsPage = () => {
             <h2 className="text-xl font-semibold mb-6">Items</h2>
 
             <div className="space-y-4">
-              {order.orderItems.map((item: any) => (
+              {order.orderItems.map((item, index) => (
                 <div
-                  key={item.product}
+                  key={item._id ?? item.product ?? index}
                   className="flex items-center gap-4 border-b border-white/10 pb-4"
                 >
                   <img
@@ -87,15 +111,9 @@ const OrderDetailsPage = () => {
             <p>
               {order.shippingAddress.firstName} {order.shippingAddress.lastName}
             </p>
-            <p className="text-sm text-gray-400">
-              {order.shippingAddress.address}
-            </p>
-            <p className="text-sm text-gray-400">
-              {order.shippingAddress.city}
-            </p>
-            <p className="text-sm text-gray-400">
-              {order.shippingAddress.phone}
-            </p>
+            <p className="text-sm text-gray-400">{order.shippingAddress.address}</p>
+            <p className="text-sm text-gray-400">{order.shippingAddress.city}</p>
+            <p className="text-sm text-gray-400">{order.shippingAddress.phone}</p>
           </div>
 
           {/* PAYMENT */}

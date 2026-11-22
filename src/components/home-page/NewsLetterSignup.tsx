@@ -1,22 +1,18 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const NewsletterSignup: React.FC = () => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Email submitted:", email);
-    setEmail("");
+    console.log('Email submitted:', email);
+    setEmail('');
   };
 
   return (
     <section className="px-10 py-20 text-center bg-white/5">
-      <h2 className="text-3xl font-bold mb-4">
-        🎁 Get 10% Off Your First Order
-      </h2>
-      <p className="text-gray-400 mb-6">
-        Subscribe to our newsletter and stay updated.
-      </p>
+      <h2 className="text-3xl font-bold mb-4">🎁 Get 10% Off Your First Order</h2>
+      <p className="text-gray-400 mb-6">Subscribe to our newsletter and stay updated.</p>
 
       <form
         onSubmit={handleSubmit}

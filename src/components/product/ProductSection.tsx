@@ -1,5 +1,5 @@
-import type { Product } from "../../types/product";
-import ProductCard from "../product/ProductCard";
+import type { Product } from '../../types/product';
+import ProductCard from '../product/ProductCard';
 
 type Props = {
   title: string;
@@ -13,9 +13,7 @@ const ProductSection = ({ title, products, loading, error }: Props) => {
     <section className="px-6 lg:px-12 py-12">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl lg:text-3xl font-extrabold text-white">
-          {title}
-        </h2>
+        <h2 className="text-2xl lg:text-3xl font-extrabold text-white">{title}</h2>
 
         <button className="text-indigo-400 hover:text-indigo-300 text-sm font-semibold">
           View All →

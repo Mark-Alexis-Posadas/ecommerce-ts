@@ -10,18 +10,20 @@ npm run lint
 npm run build
 ```
 
-Formatting requires explicit paths; do not rewrite the entire application during feature work.
-Prettier 3.10.1 and eslint-config-prettier 10.1.8 are pinned. VS Code settings require the
-Prettier and ESLint editor extensions; these were not installed automatically.
+Prettier 3.10.1 and eslint-config-prettier 10.1.8 are pinned. Formatting uses the checked-in
+configuration and excludes dependencies, generated artifacts, lockfiles, environment files and
+binary assets. Use explicit changed paths during feature development. A whole-app formatting
+pass is reserved for a dedicated formatting-only cleanup, as authorized on 2026-11-22.
 
-Verified on 2026-11-22: TypeScript and build passed. Whole-app format check reports 67 existing
-files requiring a separate formatting-only cleanup. Representative AuthField.tsx was formatted.
-ESLint/Prettier conflict check passed. Existing lint failures remain enabled and untouched:
+VS Code settings require the Prettier and ESLint editor extensions; none were installed
+automatically. Code-quality rules remain enabled. TypeScript strictness is unchanged.
 
-- src/pages/CategoriesPage.tsx:30: explicit any.
-- src/pages/OrderDetailsPage.tsx:9,56: explicit any; line 18: missing token effect dependency.
-- src/services/orderService.ts:5: explicit any.
+## Cleanup verification: 2026-11-22
 
-Total: four errors and one warning. No local test script exists. With the backend sibling
-available, run npm test there: all 41 isolated tests passed, including frontend regressions.
-Report missing cross-application tests when using a standalone checkout.
+Full formatting check, TypeScript and ESLint pass with zero errors or warnings.
+Production build passed.
+Storefront originally had four explicit-any errors and one effect-dependency warning. These are resolved through typed order contracts, unknown-error narrowing and a session-aware order effect.
+
+No local test script exists. Run npm test in the sibling ecommerce-ts-backend repository for the 45-test isolated suite, including authentication, cart, catalog and order-effect regressions. Report unavailable cross-application tests in standalone checkouts.
+
+The legacy order-history hook still contains mock data. Shipping names are accepted by validation but absent from the persisted order schema. Those business-flow issues remain separate work.

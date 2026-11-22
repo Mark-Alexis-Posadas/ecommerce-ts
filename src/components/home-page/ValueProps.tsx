@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const ValueProps: React.FC = () => {
   return (
@@ -6,9 +6,7 @@ const ValueProps: React.FC = () => {
       <div className="max-w-5xl mx-auto grid md:grid-cols-4 gap-10 text-center">
         <div>
           <h3 className="text-xl font-bold mb-2">🚚 Fast Delivery</h3>
-          <p className="text-sm text-gray-400">
-            Quick and reliable shipping nationwide.
-          </p>
+          <p className="text-sm text-gray-400">Quick and reliable shipping nationwide.</p>
         </div>
 
         <div>
@@ -23,9 +21,7 @@ const ValueProps: React.FC = () => {
 
         <div>
           <h3 className="text-xl font-bold mb-2">💬 Support</h3>
-          <p className="text-sm text-gray-400">
-            Friendly customer service anytime.
-          </p>
+          <p className="text-sm text-gray-400">Friendly customer service anytime.</p>
         </div>
       </div>
     </section>

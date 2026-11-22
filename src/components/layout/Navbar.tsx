@@ -1,11 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
-import Cart from "../ui/Cart";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import { useCart } from "../../hooks/useCart";
-
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import Cart from '../ui/Cart';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
+import { useCart } from '../../hooks/useCart';
 
 const Navbar = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
@@ -15,7 +14,10 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
-  const handleLogout = () => { logout(); navigate("/login"); };
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
   return (
     <>
       <nav className="sticky top-0 z-50 backdrop-blur-xl bg-black/40 border-b border-white/10 mb-5">
@@ -76,7 +78,7 @@ const Navbar = () => {
             {/* Cart */}
             <button
               className="relative text-gray-700 hover:text-indigo-600"
-              onClick={() => token ? setIsCartOpen(true) : navigate("/login")}
+              onClick={() => (token ? setIsCartOpen(true) : navigate('/login'))}
             >
               <FontAwesomeIcon icon={faCartShopping} className="text-white" />
               {totalItems > 0 && (
@@ -103,21 +105,14 @@ const Navbar = () => {
                 </button>
               </div>
             ) : (
-              <Link
-                to="/login"
-                className="bg-indigo-600 text-white px-4 py-1.5 rounded-lg"
-              >
+              <Link to="/login" className="bg-indigo-600 text-white px-4 py-1.5 rounded-lg">
                 Login
               </Link>
             )}
           </div>
         </div>
       </nav>
-      <Cart
-        cartItems={cartItems}
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-      />
+      <Cart cartItems={cartItems} isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
 };

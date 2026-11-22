@@ -1,23 +1,23 @@
-import { Toaster } from "react-hot-toast";
-import { Routes, Route } from "react-router-dom";
-import ProtectedRoute from "./components/layout/ProtectedRoute";
+import { Toaster } from 'react-hot-toast';
+import { Routes, Route } from 'react-router-dom';
+import ProtectedRoute from './components/layout/ProtectedRoute';
 // layouts
-import MainLayout from "./layouts/MainLayout";
-import AuthLayout from "./layouts/AuthLayout";
+import MainLayout from './layouts/MainLayout';
+import AuthLayout from './layouts/AuthLayout';
 
 // pages
-import HomePage from "./pages/HomePage";
-import ProductPage from "./pages/ProductPage";
-import CategoriesPage from "./pages/CategoriesPage";
-import ContactPage from "./pages/ContactPage";
-import CheckoutPage from "./pages/CheckoutPage";
-import OrderSuccessPage from "./pages/OrderSuccessPage";
-import ProductDetailsPage from "./pages/ProductDetailsPage";
-import LoginPage from "./pages/LoginPage";
-import OrdersPage from "./pages/OrdersPage";
-import OrderDetailsPage from "./pages/OrderDetailsPage";
-import RegisterPage from "./pages/RegisterPage";
-import CartPage from "./pages/CartPage";
+import HomePage from './pages/HomePage';
+import ProductPage from './pages/ProductPage';
+import CategoriesPage from './pages/CategoriesPage';
+import ContactPage from './pages/ContactPage';
+import CheckoutPage from './pages/CheckoutPage';
+import OrderSuccessPage from './pages/OrderSuccessPage';
+import ProductDetailsPage from './pages/ProductDetailsPage';
+import LoginPage from './pages/LoginPage';
+import OrdersPage from './pages/OrdersPage';
+import OrderDetailsPage from './pages/OrderDetailsPage';
+import RegisterPage from './pages/RegisterPage';
+import CartPage from './pages/CartPage';
 
 const App = () => {
   return (
@@ -27,30 +27,61 @@ const App = () => {
         toastOptions={{
           duration: 3000,
           style: {
-            background: "#111",
-            color: "#fff",
-            border: "1px solid rgba(255,255,255,0.1)",
+            background: '#111',
+            color: '#fff',
+            border: '1px solid rgba(255,255,255,0.1)',
           },
         }}
       />
       <Routes>
         {/* MAIN APP */}
-        <Route
-          element={
-            <MainLayout />
-          }
-        >
+        <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <CartPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/products" element={<ProductPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/contact" element={<ContactPage />} />
 
-          <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
-          <Route path="/order-success/:id" element={<ProtectedRoute><OrderSuccessPage /></ProtectedRoute>} />
-          <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
-          <Route path="/orders/:id" element={<ProtectedRoute><OrderDetailsPage /></ProtectedRoute>} />
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <CheckoutPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/order-success/:id"
+            element={
+              <ProtectedRoute>
+                <OrderSuccessPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute>
+                <OrdersPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders/:id"
+            element={
+              <ProtectedRoute>
+                <OrderDetailsPage />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         {/* AUTH */}

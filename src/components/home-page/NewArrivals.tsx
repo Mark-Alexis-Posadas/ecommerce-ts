@@ -1,5 +1,5 @@
-import type { Product } from "../../types/product";
-import ProductSection from "../product/ProductSection";
+import type { Product } from '../../types/product';
+import ProductSection from '../product/ProductSection';
 
 type Props = {
   products: Product[];
