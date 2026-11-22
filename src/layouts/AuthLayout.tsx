@@ -1,11 +1,9 @@
-import { Outlet } from "react-router-dom";
-
-const AuthLayout = () => {
-  return (
-    <div className="min-h-screen bg-black text-white">
-      <Outlet />
-    </div>
-  );
-};
-
-export default AuthLayout;
+import {Link,Outlet} from "react-router-dom";
+export default function AuthLayout(){return <div className="min-h-dvh bg-slate-50 font-sans text-slate-900 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+  <aside className="relative flex flex-col justify-between overflow-hidden bg-slate-950 px-6 py-7 text-white sm:px-10 lg:min-h-dvh lg:px-14 lg:py-12 xl:px-20">
+    <Link to="/" className="relative z-10 inline-flex w-fit items-center gap-3 rounded-lg text-xl font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-300"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M5 7h14l1 13H4L5 7Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></span>ShopZone<span className="text-indigo-400">.</span></Link>
+    <div className="relative z-10 hidden max-w-md py-16 lg:block"><span className="mb-7 inline-flex items-center gap-2 rounded-full border border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-300"><span className="h-1.5 w-1.5 rounded-full bg-indigo-400"/>A little more everyday discovery</span><h2 className="text-5xl font-semibold leading-[1.12] tracking-tight xl:text-6xl">Good finds.<br/><span className="text-indigo-300">Great beginnings.</span></h2><p className="mt-6 max-w-sm text-base leading-7 text-slate-400">From everyday essentials to something unexpected. Find your next favorite at ShopZone.</p><div aria-hidden="true" className="mt-12 grid grid-cols-3 gap-3">{['Explore','Choose','Enjoy'].map((label,index)=><div key={label} className="rounded-2xl border border-slate-800 bg-slate-900 px-4 py-5"><span className="text-xs text-indigo-300">0{index+1}</span><p className="mt-4 text-sm text-slate-300">{label}</p></div>)}</div></div>
+    <p className="hidden text-xs text-slate-400 lg:block">Thoughtful finds. Cash on delivery.</p><div aria-hidden="true" className="pointer-events-none absolute -bottom-48 -left-48 hidden h-96 w-96 rounded-full border border-slate-800 lg:block"/>
+  </aside>
+  <main className="flex min-w-0 items-center justify-center px-6 py-10 sm:px-10 sm:py-14 lg:px-16 lg:py-12"><div className="w-full max-w-md"><Outlet/><Link to="/products" className="mt-8 inline-flex items-center gap-2 rounded text-sm text-slate-500 hover:text-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-600"><span aria-hidden="true">&larr;</span>Continue browsing</Link></div></main>
+</div>}
