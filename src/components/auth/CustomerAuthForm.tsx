@@ -22,7 +22,7 @@ export default function CustomerAuthForm({mode}:{mode:'login'|'register'}) {
   const [values,setValues]=useState<Values>({name:'',email:'',password:'',confirmPassword:''});
   const [errors,setErrors]=useState<Partial<Record<Field,string>>>({});
   const [failure,setFailure]=useState('');const [busy,setBusy]=useState(false);const pending=useRef(false);
-  if(restoring)return <p role="status" className="py-16 text-sm text-slate-600">Checking your session...</p>;
+  if(restoring)return <p role="status" className="py-16 text-sm text-slate-400">Checking your session...</p>;
   if(user)return <Navigate to="/" replace/>;
   const submit=async(event:FormEvent<HTMLFormElement>)=>{
     event.preventDefault();if(pending.current)return;
@@ -50,18 +50,21 @@ export default function CustomerAuthForm({mode}:{mode:'login'|'register'}) {
     onChange:(event:ChangeEvent<HTMLInputElement>)=>{setValues(v=>({...v,[field]:event.target.value}));setErrors(v=>({...v,[field]:''}));setFailure('');},
     onBlur:()=>setErrors(v=>({...v,[field]:validate(field,values,registration)}))});
   return <div className="w-full max-w-md">
-    <header className="mb-8"><p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-700">Your ShopZone account</p><h1 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{registration?'Make yourself at home.':'Welcome back.'}</h1><p className="mt-3 text-sm leading-6 text-slate-600">{registration?'Create an account for your next great find.':'Sign in to keep shopping and manage your orders.'}</p></header>
+    <nav aria-label="Account access" className="mb-9 inline-flex rounded-xl border border-slate-700/70 bg-slate-950/40 p-1 text-sm">
+      {(['login','register'] as const).map(tab=><Link key={tab} to={tab==='login'?'/login':'/register'} aria-current={mode===tab?'page':undefined} className={'rounded-lg px-5 py-2 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 '+(mode===tab?'bg-slate-700/60 text-white':'text-slate-400 hover:text-white')}>{tab==='login'?'Sign in':'Create account'}</Link>)}
+    </nav>
+    <header className="mb-8"><p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-300">Made for your everyday</p><h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{registration?'Create your account.':'Welcome back.'}</h1><p className="mt-3 text-sm leading-6 text-slate-400">{registration?'A few details, then you are ready to discover.':'Your cart and your next great find are waiting.'}</p></header>
     <form onSubmit={submit} noValidate aria-busy={busy} className="space-y-5">
-      {failure&&<div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3.5 text-sm leading-6 text-red-800">{failure}</div>}
+      {failure&&<div role="alert" className="rounded-xl border border-red-400/25 bg-red-400/10 p-3.5 text-sm leading-6 text-red-200">{failure}</div>}
       {registration&&<AuthField {...props('name')} label="Full name" autoComplete="name" placeholder="Your full name" maxLength={100}/>}
       <AuthField {...props('email')} label="Email address" type="email" autoComplete="username" inputMode="email" autoCapitalize="none" spellCheck={false} placeholder="you@example.com" maxLength={254}/>
       <AuthField {...props('password')} label="Password" type="password" autoComplete={registration?'new-password':'current-password'} hint={registration?'At least 8 characters; maximum 72 UTF-8 bytes. Choose a long, unique password.':undefined}/>
       {registration&&<AuthField {...props('confirmPassword')} label="Confirm password" type="password" autoComplete="new-password"/>}
-      <button type="submit" disabled={busy} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-600 disabled:cursor-wait disabled:opacity-70">
+      <button type="submit" disabled={busy} className="flex min-h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-colors duration-150 hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-400 disabled:cursor-wait disabled:opacity-70">
         {busy&&<svg aria-hidden="true" className="h-4 w-4 animate-spin motion-reduce:animate-none" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="3" opacity=".3"/><path d="M12 3a9 9 0 0 1 9 9" stroke="currentColor" strokeWidth="3"/></svg>}
         {busy?registration?'Creating your account...':'Signing in...':registration?'Create account':'Sign in'}
       </button><span role="status" className="sr-only">{busy?'Your request is being processed.':''}</span>
     </form>
-    <p className="mt-7 border-t border-slate-200 pt-6 text-center text-sm text-slate-600">{registration?'Already have an account? ':'New to ShopZone? '}<Link to={registration?'/login':'/register'} className="rounded font-semibold text-indigo-700 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-600">{registration?'Sign in':'Create an account'}</Link></p>
+    <p className="mt-7 border-t border-slate-800 pt-6 text-center text-sm text-slate-400">{registration?'Already have an account? ':'New to ShopZone? '}<Link to={registration?'/login':'/register'} className="rounded font-semibold text-indigo-300 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-400">{registration?'Sign in':'Create an account'}</Link></p>
   </div>;
 }
