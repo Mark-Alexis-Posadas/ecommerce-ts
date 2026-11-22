@@ -10,24 +10,22 @@ import PromoBanner from "../components/home-page/PromoBanner";
 import FAQSection from "../components/home-page/FAQSection";
 import NewsletterSignup from "../components/home-page/NewsLetterSignup";
 import useProducts from "../hooks/useProducts";
-
 const HomePage = () => {
-  const { products, loading, error } = useProducts();
-  return (
-    <>
+    const newest = useProducts({ sort: "latest" });
+    const featured = useProducts({ featured: true, limit: 4 });
+    const best = useProducts({ sort: "best_selling" });
+    return (<>
       <HeroSection />
       <ValueProps />
       <CategoriesSection />
       <FlashSale />
-      <BestSellers products={products} loading={loading} error={error} />
-      <NewArrivals products={products} loading={loading} error={error} />
-      <FeaturedProducts products={products} loading={loading} error={error} />
+      <BestSellers products={best.products} loading={best.loading} error={best.error}/>
+      <NewArrivals products={newest.products} loading={newest.loading} error={newest.error}/>
+      <FeaturedProducts products={featured.products} loading={featured.loading} error={featured.error}/>
       <PromoBanner />
       <Testimonials />
       <FAQSection />
       <NewsletterSignup />
-    </>
-  );
+    </>);
 };
-
 export default HomePage;

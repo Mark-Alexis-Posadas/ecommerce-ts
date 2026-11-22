@@ -1,29 +1,20 @@
+import { productPlaceholder } from "../../utils/productImage";
 import { useCart } from "../../hooks/useCart";
 import type { Product } from "../../types/product";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-
 type Props = {
-  product: Product;
+    product: Product;
 };
-
 const ProductCard = ({ product }: Props) => {
-  const { cartItems, addToCart, incrementQty, decrementQty } = useCart();
-
-  const cartItem = cartItems.find((item) => item._id === product._id);
-  const isOutOfStock = product.stock === 0;
-
-  console.log(product);
-  return (
-    <div className="group relative rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-indigo-500/40 transition-all duration-300 hover:-translate-y-3">
+    const { cartItems, addToCart, incrementQty, decrementQty } = useCart();
+    const cartItem = cartItems.find((item) => item._id === product._id);
+    const isOutOfStock = product.stock <= 0 || product.isActive === false;
+    return (<div className="group relative rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-indigo-500/40 transition-all duration-300 hover:-translate-y-3">
       <Link to={`/products/${product._id}`}>
         <div className="h-48 flex items-center justify-center bg-white p-4 rounded-t-2xl">
-          <img
-            src={product.image || "/placeholder.png"}
-            alt={product.title}
-            className="h-full object-contain"
-          />
+          <img onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = productPlaceholder; }} src={product.image || product.images?.[0] || productPlaceholder} alt={product.title} className="h-full object-contain"/>
         </div>
 
         <div className="p-5 text-white">
@@ -31,13 +22,13 @@ const ProductCard = ({ product }: Props) => {
 
           <p className="text-sm text-gray-300 capitalize">
             {typeof product.category === "string"
-              ? product.category
-              : product.category?.name || "No Category"}
+            ? product.category
+            : product.category?.name || "No Category"}
           </p>
 
           <div className="mt-4 flex items-center justify-between">
             <span className="text-2xl font-extrabold text-indigo-400">
-              ${product.price}
+              ₱{product.priceAfterDiscount ?? product.price}
             </span>
           </div>
         </div>
@@ -45,37 +36,25 @@ const ProductCard = ({ product }: Props) => {
 
       {/* BUTTONS OUTSIDE LINK */}
       <div className="p-5 pt-0 text-white">
-        {!cartItem ? (
-          <button
-            disabled={isOutOfStock}
-            onClick={(e) => {
-              e.stopPropagation();
-              addToCart(product);
-            }}
-            className={`mt-5 w-full py-3 rounded-xl font-bold transition ${
-              isOutOfStock
+        {!cartItem ? (<button disabled={isOutOfStock} onClick={(e) => {
+                e.stopPropagation();
+                addToCart(product);
+            }} className={`mt-5 w-full py-3 rounded-xl font-bold transition ${isOutOfStock
                 ? "bg-gray-500 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-500"
-            }`}
-          >
+                : "bg-indigo-600 hover:bg-indigo-500"}`}>
             {isOutOfStock ? "Out of Stock" : "Add to Cart"}
-          </button>
-        ) : (
-          <div className="mt-5 flex items-center justify-between bg-indigo-600 rounded-xl p-2">
+          </button>) : (<div className="mt-5 flex items-center justify-between bg-indigo-600 rounded-xl p-2">
             <button onClick={() => decrementQty(product._id)}>
-              <FontAwesomeIcon icon={faMinus} />
+              <FontAwesomeIcon icon={faMinus}/>
             </button>
 
             <span>{cartItem.quantity}</span>
 
-            <button onClick={() => incrementQty(product._id)}>
-              <FontAwesomeIcon icon={faPlus} />
+            <button disabled={isOutOfStock} onClick={() => incrementQty(product._id)}>
+              <FontAwesomeIcon icon={faPlus}/>
             </button>
-          </div>
-        )}
+          </div>)}
       </div>
-    </div>
-  );
+    </div>);
 };
-
 export default ProductCard;
