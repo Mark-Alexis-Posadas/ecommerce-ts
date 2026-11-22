@@ -14,7 +14,8 @@ export type Product = {
   _id: string;
   title: string;
   price: number;
-  category: Category;
+  category: Category | string | null;
+  image?: string;
   images: string[];
   description: string;
   rating: Rating;
@@ -48,12 +49,6 @@ export type ProductsResponse = {
     limit: number;
     total: number;
     totalPages: number;
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-  };
-  links: {
-    next: string | null;
-    prev: string | null;
   };
 };
 

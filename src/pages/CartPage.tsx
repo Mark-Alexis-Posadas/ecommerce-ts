@@ -52,7 +52,9 @@ const CartPage = () => {
                   </h2>
 
                   <p className="text-sm text-gray-400 capitalize">
-                    {item.category}
+                    {typeof item.category === "string"
+                      ? item.category
+                      : item.category?.name || "No Category"}
                   </p>
 
                   <p className="text-xs text-gray-500 mt-1">

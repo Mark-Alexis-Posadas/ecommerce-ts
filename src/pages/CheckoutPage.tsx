@@ -201,7 +201,7 @@ const CheckoutPage = () => {
                   value="COD"
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 />
-                Cash on Delivery Cash on Delivery
+                Cash on Delivery
               </label>
               {errors.paymentMethod && (
                 <p className="text-red-500 text-xs">
@@ -209,41 +209,6 @@ const CheckoutPage = () => {
                 </p>
               )}
 
-              <label className="flex items-center gap-3">
-                <input
-                  className={`space-y-3 p-3 rounded-lg ${
-                    errors.paymentMethod ? "border border-red-500" : ""
-                  }`}
-                  type="radio"
-                  name="payment"
-                  value="CARD"
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                />
-                Credit / Debit Card Credit / Debit Card
-              </label>
-              {errors.paymentMethod && (
-                <p className="text-red-500 text-xs">
-                  {errors.paymentMethod[0]}
-                </p>
-              )}
-
-              <label className="flex items-center gap-3">
-                <input
-                  className={`space-y-3 p-3 rounded-lg ${
-                    errors.paymentMethod ? "border border-red-500" : ""
-                  }`}
-                  type="radio"
-                  name="payment"
-                  value="GCASH"
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                />
-                GCash GCash
-              </label>
-              {errors.paymentMethod && (
-                <p className="text-red-500 text-xs">
-                  {errors.paymentMethod[0]}
-                </p>
-              )}
             </div>
           </div>
         </div>

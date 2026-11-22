@@ -14,12 +14,13 @@ const ProductCard = ({ product }: Props) => {
   const cartItem = cartItems.find((item) => item._id === product._id);
   const isOutOfStock = product.stock === 0;
 
+  console.log(product);
   return (
     <div className="group relative rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-indigo-500/40 transition-all duration-300 hover:-translate-y-3">
       <Link to={`/products/${product._id}`}>
         <div className="h-48 flex items-center justify-center bg-white p-4 rounded-t-2xl">
           <img
-            src={product.images?.[0] || "/placeholder.png"}
+            src={product.image || "/placeholder.png"}
             alt={product.title}
             className="h-full object-contain"
           />
@@ -29,7 +30,9 @@ const ProductCard = ({ product }: Props) => {
           <h3 className="text-lg font-bold line-clamp-1">{product.title}</h3>
 
           <p className="text-sm text-gray-300 capitalize">
-            {product.category?.name || "No Category"}
+            {typeof product.category === "string"
+              ? product.category
+              : product.category?.name || "No Category"}
           </p>
 
           <div className="mt-4 flex items-center justify-between">

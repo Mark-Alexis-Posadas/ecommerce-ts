@@ -10,7 +10,7 @@ export const checkoutSchema = z.object({
     .string()
     .min(10, "Invalid phone number")
     .regex(/^[0-9]+$/, "Phone must be numbers only"),
-  paymentMethod: z.enum(["COD", "CARD", "GCASH"], {
-    errorMap: () => ({ message: "Select payment method" }),
+  paymentMethod: z.literal("COD", {
+    error: "Select Cash on Delivery",
   }),
 });

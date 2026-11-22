@@ -9,7 +9,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  const addToCart = async (product: Product) => {
+  const addToCart = async (product: Product, quantity = 1) => {
     try {
       const token = localStorage.getItem("token");
 
@@ -18,7 +18,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
-      const res = await cartAPI.addToCart(product._id, 1, token);
+      const res = await cartAPI.addToCart(product._id, quantity, token);
 
       setCartItems(mapCartItems(res.data.items));
     } catch (error) {

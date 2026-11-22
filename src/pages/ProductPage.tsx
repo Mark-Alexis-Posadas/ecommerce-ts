@@ -27,7 +27,9 @@ const ProductPage = () => {
 
     // filter by category
     if (category) {
-      items = items.filter((product) => product.category === category);
+      items = items.filter((product) =>
+        (typeof product.category === "string" ? product.category : product.category?._id) === category,
+      );
     }
 
     // search

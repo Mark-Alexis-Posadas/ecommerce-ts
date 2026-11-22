@@ -4,13 +4,9 @@ import type { Product } from "../types/product";
 import { useCart } from "../hooks/useCart";
 
 const API_URL = import.meta.env.VITE_API_URL;
-interface ProductProp extends Product {
-  images: string;
-  stock: number;
-}
 const ProductDetailsPage = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState<ProductProp | null>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [qty, setQty] = useState(1);
   const [selectedImage, setSelectedImage] = useState("");
   const { addToCart } = useCart();
@@ -18,9 +14,9 @@ const ProductDetailsPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       const res = await fetch(`${API_URL}/api/products/${id}`);
-      const data = await res.json();
+      const data: Product = await res.json();
       setProduct(data);
-      setSelectedImage(data.image);
+      setSelectedImage(data.image || data.images[0] || "");
     };
 
     fetchProduct();
@@ -43,7 +39,7 @@ const ProductDetailsPage = () => {
 
           {/* thumbnails */}
           <div className="flex gap-3 mt-4">
-            {[product.image, ...(product.images || [])].map((img, i) => (
+            {(product.image ? [product.image, ...product.images] : product.images).map((img, i) => (
               <img
                 key={i}
                 src={img}
@@ -105,7 +101,7 @@ const ProductDetailsPage = () => {
           {/* button */}
           <button
             disabled={isOutOfStock}
-            onClick={() => addToCart({ ...product, quantity: qty })}
+            onClick={() => addToCart(product, qty)}
             className={`w-full py-3 rounded-xl font-bold transition ${
               isOutOfStock
                 ? "bg-gray-500 cursor-not-allowed"

@@ -1,3 +1,5 @@
+import type { CartItem } from "./product";
+
 export type Order = {
   id: string;
   items: CartItem[];
