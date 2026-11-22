@@ -5,12 +5,12 @@ import { useAuth } from "../hooks/useAuth";
 
 const OrderDetailsPage = () => {
   const { id } = useParams();
-  const { user } = useAuth();
+  const { token } = useAuth();
   const [order, setOrder] = useState<any>(null);
 
   useEffect(() => {
     const fetchOrder = async () => {
-      const res = await getOrderById(id!, user.token);
+      const res = await getOrderById(id!, token!);
       setOrder(res.data);
     };
 

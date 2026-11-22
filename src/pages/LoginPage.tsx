@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-const API_URL = import.meta.env.VITE_API_URL;
+import { useAuth } from "../hooks/useAuth";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,8 +10,9 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
 
+  const { user, login } = useAuth();
   const navigate = useNavigate();
-  const isAuthenticated: boolean = !!localStorage.getItem("token");
+  const isAuthenticated: boolean = !!user;
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
@@ -40,23 +41,7 @@ const LoginPage = () => {
     const loadingToast = toast.loading("Logging in...");
 
     try {
-      const res = await axios.post(`${API_URL}/api/auth/login`, {
-        email,
-        password,
-      });
-
-      const { token, _id, name } = res.data;
-      console.log(token, name);
-
-      if (!token) {
-        toast.dismiss(loadingToast);
-        toast.error("No token received ❌");
-        return;
-      }
-
-      // 🔥 Save auth data
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify({ _id, name, email }));
+      await login(email, password);
 
       toast.dismiss(loadingToast);
       toast.success("Login successful 🎉");

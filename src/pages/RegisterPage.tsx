@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-const API_URL = import.meta.env.VITE_API_URL;
+import { useAuth } from "../hooks/useAuth";
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,8 +15,9 @@ const RegisterPage = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  const { user, register } = useAuth();
   const navigate = useNavigate();
-  const isAuthenticated: boolean = !!localStorage.getItem("token");
+  const isAuthenticated: boolean = !!user;
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
@@ -34,23 +35,7 @@ const RegisterPage = () => {
     const loadingToast = toast.loading("Creating account...");
 
     try {
-      const res = await axios.post(`${API_URL}/api/auth/signup`, {
-        name,
-        email,
-        password,
-      });
-
-      const token: string | undefined = res.data?.token;
-
-      if (!token) {
-        toast.dismiss(loadingToast);
-        toast.error("No token received ❌");
-        return;
-      }
-
-      // 🔥 Save token + user
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(res.data));
+      await register(name, email, password);
 
       toast.dismiss(loadingToast);
       toast.success("Account created 🎉");

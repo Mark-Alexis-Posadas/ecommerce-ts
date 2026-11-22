@@ -3,32 +3,36 @@ import { CartContext } from "./CartContext";
 import type { CartItem, Product, CartItemFromAPI } from "../types/product";
 import * as cartAPI from "../services/cartService";
 import { mapCartItems } from "../utils/cartMapper";
-import axios from "axios";
+import { api as axios, TOKEN_KEY } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
+  const { token } = useAuth();
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const addToCart = async (product: Product, quantity = 1) => {
     try {
-      const token = localStorage.getItem("token");
+
 
       if (!token) {
-        console.log("No token");
+        navigate("/login");
         return;
       }
 
       const res = await cartAPI.addToCart(product._id, quantity, token);
 
-      setCartItems(mapCartItems(res.data.items));
-    } catch (error) {
-      console.error("Add to cart failed", error);
+      if (token === localStorage.getItem(TOKEN_KEY)) setCartItems(mapCartItems(res.data.items));
+    } catch {
+      console.error("Add to cart failed");
     }
   };
 
   const incrementQty = async (productId: string) => {
     try {
-      const token = localStorage.getItem("token");
+
       if (!token) return;
 
       const res = await axios.put(
@@ -39,15 +43,15 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         },
       );
 
-      setCartItems(mapCartItems(res.data.items));
-    } catch (error) {
-      console.error("Increment failed", error);
+      if (token === localStorage.getItem(TOKEN_KEY)) setCartItems(mapCartItems(res.data.items));
+    } catch {
+      console.error("Increment failed");
     }
   };
 
   const decrementQty = async (productId: string) => {
     try {
-      const token = localStorage.getItem("token");
+
       if (!token) return;
 
       const res = await axios.put(
@@ -58,30 +62,30 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         },
       );
 
-      setCartItems(mapCartItems(res.data.items));
-    } catch (error) {
-      console.error("Decrement failed", error);
+      if (token === localStorage.getItem(TOKEN_KEY)) setCartItems(mapCartItems(res.data.items));
+    } catch {
+      console.error("Decrement failed");
     }
   };
 
   const removeFromCart = async (productId: string) => {
     try {
-      const token = localStorage.getItem("token");
+
       if (!token) return;
 
       const res = await axios.delete(`${API_URL}/api/cart/${productId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setCartItems(mapCartItems(res.data.items));
-    } catch (error) {
-      console.error("Remove from cart failed", error);
+      if (token === localStorage.getItem(TOKEN_KEY)) setCartItems(mapCartItems(res.data.items));
+    } catch {
+      console.error("Remove from cart failed");
     }
   };
 
   const clearCart = async () => {
     try {
-      const token = localStorage.getItem("token");
+
       if (!token) return;
 
       await axios.delete(`${API_URL}/api/cart`, {
@@ -90,32 +94,36 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
       // 🔥 important: clear frontend state
       setCartItems([]);
-    } catch (error) {
-      console.error("Clear cart failed", error);
+    } catch {
+      console.error("Clear cart failed");
     }
   };
 
   useEffect(() => {
+    let active = true;
+    Promise.resolve().then(() => { if (active) setCartItems([]); });
     const fetchCart = async () => {
       try {
-        const token = localStorage.getItem("token");
+
         if (!token) return;
 
         const res = await cartAPI.getCart(token);
 
+        if (!active || token !== localStorage.getItem(TOKEN_KEY)) return;
         setCartItems(
           res.data.items.map((item: CartItemFromAPI) => ({
             ...item.product,
             quantity: item.quantity,
           })),
         );
-      } catch (error) {
-        console.error(error);
+      } catch {
+        console.error("Cart request failed");
       }
     };
 
     fetchCart();
-  }, []);
+    return () => { active = false; };
+  }, [token]);
 
   return (
     <CartContext.Provider

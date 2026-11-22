@@ -1,9 +1,9 @@
-import axios from "axios";
+import { api as axios } from "./api";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const createOrder = async (orderData: any, token: string) => {
-  return axios.post(API_URL, orderData, {
+  return axios.post(`${API_URL}/api/orders`, orderData, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };

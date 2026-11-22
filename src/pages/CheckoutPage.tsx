@@ -17,7 +17,7 @@ const CheckoutPage = () => {
     postalCode: "",
     phone: "",
   });
-  const { user } = useAuth();
+  const { token } = useAuth();
   const [paymentMethod, setPaymentMethod] = useState("");
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -51,14 +51,14 @@ const CheckoutPage = () => {
         paymentMethod,
       };
 
-      const res = await createOrder(orderData, user.token);
+      const res = await createOrder(orderData, token!);
       const createdOrder = res.data;
       toast.success("Order placed successfully!");
 
       navigate(`/orders/${createdOrder._id}`);
-    } catch (err) {
+    } catch {
       toast.error("Something went wrong. Please try again.");
-      console.error("❌ Error creating order:", err);
+
     }
   };
 

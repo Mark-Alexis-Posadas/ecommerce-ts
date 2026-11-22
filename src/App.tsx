@@ -37,22 +37,20 @@ const App = () => {
         {/* MAIN APP */}
         <Route
           element={
-            <ProtectedRoute>
-              <MainLayout />
-            </ProtectedRoute>
+            <MainLayout />
           }
         >
           <Route path="/" element={<HomePage />} />
-          <Route path="/cart" element={<CartPage />} />
+          <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
           <Route path="/products" element={<ProductPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/contact" element={<ContactPage />} />
 
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/order-success/:id" element={<OrderSuccessPage />} />
-          <Route path="/orders" element={<OrdersPage />} />
-          <Route path="/orders/:id" element={<OrderDetailsPage />} />
+          <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+          <Route path="/order-success/:id" element={<ProtectedRoute><OrderSuccessPage /></ProtectedRoute>} />
+          <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
+          <Route path="/orders/:id" element={<ProtectedRoute><OrderDetailsPage /></ProtectedRoute>} />
         </Route>
 
         {/* AUTH */}
