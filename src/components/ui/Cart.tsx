@@ -1,8 +1,11 @@
+import {formatCentavos} from "../../utils/cartMoney";
+import {CartFeedback,CartLineIssues} from "../../components/cart/CartFeedback";
+import {productPlaceholder} from "../../utils/productImage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useCart } from "../../hooks/useCart";
 import type { CartItem } from "../../types/product";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type CartProps = {
   isOpen: boolean;
@@ -11,18 +14,8 @@ type CartProps = {
 };
 
 const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
-  const { incrementQty, decrementQty, removeFromCart, clearCart } = useCart();
-
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
-
-  const formatCurrency = (value: number) =>
-    new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(value);
+  const navigate=useNavigate();
+  const { incrementQty, decrementQty, removeFromCart, clearCart, subtotalCentavos, checkoutEligible, loading, pending } = useCart();
 
   return (
     <>
@@ -36,7 +29,9 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
 
       {/* Cart Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-[380px] bg-black/80 backdrop-blur-xl border-l border-white/10 shadow-2xl z-50 transform transition-transform duration-300
+        inert={!isOpen}
+        aria-hidden={!isOpen}
+        className={`fixed top-0 right-0 h-full w-[380px] max-w-full bg-black/80 backdrop-blur-xl border-l border-white/10 shadow-2xl z-50 transform transition-transform duration-300
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="flex flex-col h-full text-white">
@@ -51,9 +46,10 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
             </button>
           </div>
 
+          <div className="px-4 pt-3"><CartFeedback /></div>
           {/* Cart Items */}
           <div className="p-4 flex flex-col gap-4 overflow-y-auto flex-1">
-            {cartItems.length === 0 ? (
+            {loading && cartItems.length === 0 ? null : cartItems.length === 0 ? (
               <div className="text-center mt-10 text-gray-400">
                 <p className="mb-3">🛒 Your cart feels lonely...</p>
                 <Link
@@ -67,11 +63,11 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
             ) : (
               cartItems.map((item) => (
                 <div
-                  key={item._id}
+                  key={item.lineId}
                   className="flex gap-3 border-b border-white/10 pb-3"
                 >
                   <img
-                    src={item.image}
+                    src={item.image || item.images[0] || productPlaceholder}
                     alt={item.title}
                     className="w-16 h-16 object-contain rounded bg-white p-1"
                   />
@@ -82,12 +78,15 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
                     </h3>
 
                     <p className="text-sm text-gray-400">
-                      {formatCurrency(item.price)} × {item.quantity}
+                      {formatCentavos(item.unitPriceCentavos)} × {item.quantity}
                     </p>
 
+                    <CartLineIssues item={item} />
                     <div className="mt-3 flex items-center gap-2">
                       <button
-                        onClick={() => decrementQty(item._id)}
+                        disabled={pending || loading}
+                      aria-label={"Decrease quantity of " + item.title}
+                      onClick={() => decrementQty(item._id)}
                         className="w-7 h-7 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 active:scale-90 transition rounded text-xs"
                       >
                         <FontAwesomeIcon icon={faMinus} />
@@ -98,7 +97,9 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
                       </span>
 
                       <button
-                        onClick={() => incrementQty(item._id)}
+                        disabled={pending || loading || !item.available || item.quantity >= item.availableStock}
+                      aria-label={"Increase quantity of " + item.title}
+                      onClick={() => incrementQty(item._id)}
                         className="w-7 h-7 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 active:scale-90 transition rounded text-xs"
                       >
                         <FontAwesomeIcon icon={faPlus} />
@@ -107,6 +108,8 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
                   </div>
                   <div className="flex flex-col items-end justify-between">
                     <button
+                      disabled={pending || loading}
+                      aria-label={"Remove " + item.title}
                       onClick={() => removeFromCart(item._id)}
                       className="text-gray-400 hover:text-red-500 transition text-sm"
                     >
@@ -114,7 +117,7 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
                     </button>
 
                     <div className="text-sm text-indigo-400 font-semibold">
-                      {formatCurrency(item.price * item.quantity)}
+                      {formatCentavos(item.lineTotalCentavos)}
                     </div>
                   </div>
                 </div>
@@ -128,7 +131,7 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
               <div className="flex justify-between mb-4">
                 <span>Total</span>
                 <span className="font-semibold text-indigo-400">
-                  {formatCurrency(total)}
+                  {formatCentavos(subtotalCentavos)}
                 </span>
               </div>
 
@@ -140,10 +143,11 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
                 View My Cart 🛒
               </Link>
 
-              {cartItems.length > 1 && (
+              {cartItems.length > 0 && (
                 <button
+                  disabled={pending || loading}
                   onClick={() => {
-                    if (confirm("Clear all items in cart?")) {
+                    if (!pending && confirm("Clear all items in cart?")) {
                       clearCart();
                     }
                   }}
@@ -153,13 +157,13 @@ const Cart = ({ isOpen, onClose, cartItems }: CartProps) => {
                 </button>
               )}
 
-              <Link
-                to="/checkout"
-                onClick={onClose}
-                className="w-full bg-indigo-600 p-3 rounded-xl font-semibold hover:bg-indigo-500 active:scale-95 transition text-center block"
+              <button
+                disabled={!checkoutEligible || pending || loading}
+                onClick={() => {navigate("/checkout");onClose();}}
+                className="w-full disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 p-3 rounded-xl font-semibold hover:bg-indigo-500 active:scale-95 transition text-center block"
               >
                 Checkout
-              </Link>
+              </button>
             </div>
           )}
         </div>

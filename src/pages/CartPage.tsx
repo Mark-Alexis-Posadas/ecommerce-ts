@@ -1,28 +1,22 @@
-import { Link } from "react-router-dom";
+import {formatCentavos} from "../utils/cartMoney";
+import {CartFeedback,CartLineIssues} from "../components/cart/CartFeedback";
+import {productPlaceholder} from "../utils/productImage";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../hooks/useCart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const CartPage = () => {
-  const { cartItems, incrementQty, decrementQty, removeFromCart, clearCart } =
+  const navigate = useNavigate();
+  const { cartItems, incrementQty, decrementQty, removeFromCart, clearCart, subtotalCentavos, totalQuantity, checkoutEligible, loading, pending } =
     useCart();
-
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
-
-  const formatCurrency = (value: number) =>
-    new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(value);
 
   return (
     <div className="min-h-screen px-6 md:px-10 py-12 max-w-6xl mx-auto text-white">
       <h1 className="text-4xl font-bold mb-10">🛒 My Cart</h1>
 
-      {cartItems.length === 0 ? (
+      <CartFeedback />
+      {!loading && cartItems.length === 0 ? (
         <div className="text-center text-gray-400 mt-20">
           <p className="mb-4 text-lg">Your cart is empty...</p>
           <Link to="/" className="text-indigo-400 hover:underline text-sm">
@@ -35,12 +29,12 @@ const CartPage = () => {
           <div className="md:col-span-2 flex flex-col gap-5">
             {cartItems.map((item) => (
               <div
-                key={item._id}
+                key={item.lineId}
                 className="flex gap-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition"
               >
                 {/* IMAGE */}
                 <img
-                  src={item.image}
+                  src={item.image || item.images[0] || productPlaceholder}
                   alt={item.title}
                   className="w-24 h-24 object-contain bg-white p-2 rounded-xl"
                 />
@@ -61,9 +55,12 @@ const CartPage = () => {
                     ⭐ {item.rating?.rate} ({item.rating?.count} reviews)
                   </p>
 
+                  <CartLineIssues item={item} />
                   {/* QTY */}
                   <div className="flex items-center gap-2 mt-4">
                     <button
+                      disabled={pending || loading}
+                      aria-label={"Decrease quantity of " + item.title}
                       onClick={() => decrementQty(item._id)}
                       className="w-8 h-8 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 active:scale-90 transition rounded"
                     >
@@ -73,6 +70,8 @@ const CartPage = () => {
                     <span className="w-6 text-center">{item.quantity}</span>
 
                     <button
+                      disabled={pending || loading || !item.available || item.quantity >= item.availableStock}
+                      aria-label={"Increase quantity of " + item.title}
                       onClick={() => incrementQty(item._id)}
                       className="w-8 h-8 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 active:scale-90 transition rounded"
                     >
@@ -82,7 +81,9 @@ const CartPage = () => {
 
                   {/* REMOVE */}
                   <button
-                    onClick={() => removeFromCart(item._id)}
+                    disabled={pending || loading}
+                      aria-label={"Remove " + item.title}
+                      onClick={() => removeFromCart(item._id)}
                     className="text-red-400 text-sm mt-3 hover:underline"
                   >
                     <FontAwesomeIcon icon={faTrash} /> Remove
@@ -92,11 +93,11 @@ const CartPage = () => {
                 {/* PRICE */}
                 <div className="flex flex-col items-end justify-between">
                   <span className="text-indigo-400 font-semibold text-lg">
-                    {formatCurrency(item.price * item.quantity)}
+                    {formatCentavos(item.lineTotalCentavos)}
                   </span>
 
                   <span className="text-xs text-gray-400">
-                    {formatCurrency(item.price)} each
+                    {formatCentavos(item.unitPriceCentavos)} each
                   </span>
                 </div>
               </div>
@@ -109,29 +110,32 @@ const CartPage = () => {
 
             <div className="flex justify-between mb-3 text-sm text-gray-400">
               <span>Items</span>
-              <span>{cartItems.length}</span>
+              <span>{totalQuantity}</span>
             </div>
 
             <div className="flex justify-between mb-4 text-lg">
               <span>Total</span>
               <span className="text-indigo-400 font-semibold">
-                {formatCurrency(total)}
+                {formatCentavos(subtotalCentavos)}
               </span>
             </div>
 
+            {!checkoutEligible && !loading && !pending && <p className="mb-3 text-sm text-amber-300">Review the cart issues before checkout.</p>}
             {/* ACTIONS */}
             <div className="flex flex-col gap-3 mt-6">
-              <Link
-                to="/checkout"
-                className="w-full bg-indigo-600 p-3 rounded-xl text-center font-semibold hover:bg-indigo-500 active:scale-95 transition"
+              <button
+                disabled={!checkoutEligible || pending || loading}
+                onClick={() => navigate("/checkout")}
+                className="w-full disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-600 p-3 rounded-xl text-center font-semibold hover:bg-indigo-500 active:scale-95 transition"
               >
                 Proceed to Checkout
-              </Link>
+              </button>
 
-              {cartItems.length > 1 && (
+              {cartItems.length > 0 && (
                 <button
+                  disabled={pending || loading}
                   onClick={() => {
-                    if (confirm("Clear all items in cart?")) {
+                    if (!pending && confirm("Clear all items in cart?")) {
                       clearCart();
                     }
                   }}

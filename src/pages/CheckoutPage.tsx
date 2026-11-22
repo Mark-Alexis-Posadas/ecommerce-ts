@@ -1,4 +1,8 @@
-import { useState } from "react";
+import axios from "axios";
+import {CartFeedback,CartLineIssues} from "../components/cart/CartFeedback";
+import {formatCentavos} from "../utils/cartMoney";
+import {productPlaceholder} from "../utils/productImage";
+import { useState, useRef } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { createOrder } from "../services/orderService";
@@ -8,7 +12,9 @@ import { checkoutSchema } from "../validators/checkoutSchema";
 
 const CheckoutPage = () => {
   const [errors, setErrors] = useState<Record<string, string[]>>({});
-  const { cartItems } = useCart();
+  const { cartItems, subtotalCentavos, checkoutEligible, loading, pending, refreshCart } = useCart();
+  const [placing,setPlacing]=useState(false);
+  const submitting=useRef(false);
   const [shipping, setShipping] = useState({
     firstName: "",
     lastName: "",
@@ -19,14 +25,10 @@ const CheckoutPage = () => {
   });
   const { token } = useAuth();
   const [paymentMethod, setPaymentMethod] = useState("");
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
-
   const navigate = useNavigate();
 
   const handlePlaceOrder = async () => {
+    if(submitting.current || !checkoutEligible || loading || pending)return;
     try {
       const formData = {
         ...shipping,
@@ -51,21 +53,27 @@ const CheckoutPage = () => {
         paymentMethod,
       };
 
+      submitting.current=true;setPlacing(true);
       const res = await createOrder(orderData, token!);
       const createdOrder = res.data;
       toast.success("Order placed successfully!");
+      if(createdOrder.cartClearConflict)toast.error("Your cart changed during checkout. Review remaining items before ordering again.");
+      await refreshCart();
 
       navigate(`/orders/${createdOrder._id}`);
-    } catch {
-      toast.error("Something went wrong. Please try again.");
-
-    }
+    } catch (error) {
+      const message=axios.isAxiosError<{message?:string}>(error)?error.response?.data?.message:undefined;
+      toast.error(message||"Unable to place order. Please review your cart.");
+      await refreshCart();
+    } finally {submitting.current=false;setPlacing(false);}
   };
 
   return (
     <div className="min-h-screen px-6 md:px-10 py-12 max-w-7xl mx-auto">
       <h1 className="text-4xl font-bold mb-10">Checkout</h1>
 
+      <CartFeedback />
+      {!checkoutEligible && !loading && <p className="mb-4 text-amber-300">Review your cart before placing an order. <a href="/cart" className="underline">Return to cart</a></p>}
       <div className="grid md:grid-cols-3 gap-10">
         {/* LEFT SIDE */}
         <div className="md:col-span-2 space-y-8">
@@ -220,12 +228,12 @@ const CheckoutPage = () => {
           <div className="space-y-4 max-h-80 overflow-y-auto pr-2">
             {cartItems.map((item) => (
               <div
-                key={item._id}
+                key={item.lineId}
                 className="flex items-center gap-4 border-b border-white/10 pb-4"
               >
                 {/* IMAGE */}
                 <img
-                  src={item.images[0]}
+                  src={item.image || item.images[0] || productPlaceholder}
                   alt={item.title}
                   className="w-16 h-16 object-contain bg-white rounded-lg p-2"
                 />
@@ -234,15 +242,16 @@ const CheckoutPage = () => {
                 <div className="flex-1">
                   <p className="text-sm font-semibold">{item.title}</p>
 
+                  <CartLineIssues item={item} />
                   {/* SUBTOTAL BREAKDOWN */}
                   <p className="text-xs text-gray-400">
-                    ₱{item.price} × {item.quantity}
+                    {formatCentavos(item.unitPriceCentavos)} × {item.quantity}
                   </p>
                 </div>
 
                 {/* PRICE */}
                 <p className="text-sm font-bold">
-                  ₱{item.price * item.quantity}
+                  {formatCentavos(item.lineTotalCentavos)}
                 </p>
               </div>
             ))}
@@ -250,14 +259,15 @@ const CheckoutPage = () => {
 
           <div className="flex justify-between text-lg font-bold mt-6">
             <span>Total</span>
-            <span>₱{total}</span>
+            <span>{formatCentavos(subtotalCentavos)}</span>
           </div>
 
           <button
             className="w-full mt-6 py-4 bg-indigo-600 rounded-xl font-bold hover:bg-indigo-500 transition"
+            disabled={!checkoutEligible || pending || loading || placing}
             onClick={handlePlaceOrder}
           >
-            Place Order
+            {placing ? "Placing order..." : "Place Order"}
           </button>
         </div>
       </div>

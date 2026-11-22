@@ -10,7 +10,7 @@ const ProductDetailsPage = () => {
     const [error, setError] = useState("");
     const [qty, setQty] = useState(1);
     const [selectedImage, setSelectedImage] = useState("");
-    const { addToCart } = useCart();
+    const { addToCart, pending, loading: cartLoading, cartItems } = useCart();
     useEffect(() => {
         const fetchProduct = async () => {
             const res = await fetch(`${API_URL}/api/products/${id}`);
@@ -28,6 +28,8 @@ const ProductDetailsPage = () => {
         return <p className="text-center">{error}</p>;
     if (!product)
         return <p className="text-center">Loading...</p>;
+    const alreadyInCart = cartItems.find(item => item._id === product._id)?.quantity || 0;
+    const remaining = Math.max(0, product.stock - alreadyInCart);
     const isOutOfStock = product.stock <= 0 || product.isActive === false;
     return (<section className="px-6 md:px-10 py-16 max-w-6xl mx-auto">
       <div className="grid md:grid-cols-2 gap-12">
@@ -62,6 +64,7 @@ const ProductDetailsPage = () => {
             {isOutOfStock ? "Out of Stock" : `${product.stock} items available`}
           </p>
 
+          {alreadyInCart > 0 && <p className="mb-4 text-sm text-gray-400">{alreadyInCart} already in your cart. You can add up to {remaining} more.</p>}
           {/* quantity */}
           <div className="flex items-center gap-4 mb-6">
             <button onClick={() => setQty((prev) => Math.max(1, prev - 1))} className="px-3 py-1 bg-gray-700 rounded">
@@ -70,13 +73,13 @@ const ProductDetailsPage = () => {
 
             <span className="text-lg">{qty}</span>
 
-            <button onClick={() => setQty((prev) => (prev < product.stock ? prev + 1 : prev))} className="px-3 py-1 bg-gray-700 rounded">
+            <button onClick={() => setQty((prev) => (prev < remaining ? prev + 1 : prev))} className="px-3 py-1 bg-gray-700 rounded">
               +
             </button>
           </div>
 
           {/* button */}
-          <button disabled={isOutOfStock} onClick={() => addToCart(product, qty)} className={`w-full py-3 rounded-xl font-bold transition ${isOutOfStock
+          <button disabled={isOutOfStock || pending || cartLoading || qty > remaining} onClick={() => addToCart(product, qty)} className={`w-full py-3 rounded-xl font-bold transition ${isOutOfStock
             ? "bg-gray-500 cursor-not-allowed"
             : "bg-indigo-600 hover:bg-indigo-500"}`}>
             {isOutOfStock ? "Out of Stock" : "Add to Cart"}

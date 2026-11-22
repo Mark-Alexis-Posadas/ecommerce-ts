@@ -26,22 +26,7 @@ export type Product = {
     stock: number;
     createdAt: string;
 };
-export type CartItem = Product & {
-    quantity: number;
-};
-export type CartItemFromAPI = {
-    _id: string;
-    product: Product;
-    quantity: number;
-    price: number;
-};
-export type CartResponse = {
-    _id: string;
-    user: string;
-    items: CartItemFromAPI[];
-    createdAt: string;
-    updatedAt: string;
-};
+export type { CartItem, CartItemFromAPI, CartResponse } from "./cart";
 export type ProductsResponse = {
     data: Product[];
     meta: {

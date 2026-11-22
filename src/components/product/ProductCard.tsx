@@ -8,7 +8,7 @@ type Props = {
     product: Product;
 };
 const ProductCard = ({ product }: Props) => {
-    const { cartItems, addToCart, incrementQty, decrementQty } = useCart();
+    const { cartItems, addToCart, incrementQty, decrementQty, pending, loading } = useCart();
     const cartItem = cartItems.find((item) => item._id === product._id);
     const isOutOfStock = product.stock <= 0 || product.isActive === false;
     return (<div className="group relative rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-indigo-500/40 transition-all duration-300 hover:-translate-y-3">
@@ -36,7 +36,7 @@ const ProductCard = ({ product }: Props) => {
 
       {/* BUTTONS OUTSIDE LINK */}
       <div className="p-5 pt-0 text-white">
-        {!cartItem ? (<button disabled={isOutOfStock} onClick={(e) => {
+        {!cartItem ? (<button disabled={isOutOfStock || pending || loading} onClick={(e) => {
                 e.stopPropagation();
                 addToCart(product);
             }} className={`mt-5 w-full py-3 rounded-xl font-bold transition ${isOutOfStock
@@ -44,13 +44,13 @@ const ProductCard = ({ product }: Props) => {
                 : "bg-indigo-600 hover:bg-indigo-500"}`}>
             {isOutOfStock ? "Out of Stock" : "Add to Cart"}
           </button>) : (<div className="mt-5 flex items-center justify-between bg-indigo-600 rounded-xl p-2">
-            <button onClick={() => decrementQty(product._id)}>
+            <button disabled={pending || loading} onClick={() => decrementQty(product._id)}>
               <FontAwesomeIcon icon={faMinus}/>
             </button>
 
             <span>{cartItem.quantity}</span>
 
-            <button disabled={isOutOfStock} onClick={() => incrementQty(product._id)}>
+            <button disabled={isOutOfStock || pending || loading || !cartItem.available || cartItem.quantity >= cartItem.availableStock} onClick={() => incrementQty(product._id)}>
               <FontAwesomeIcon icon={faPlus}/>
             </button>
           </div>)}

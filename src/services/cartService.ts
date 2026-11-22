@@ -1,34 +1,9 @@
-import { api as axios } from "./api";
-
-const API_URL = import.meta.env.VITE_API_URL;
-export const getCart = async (token: string) => {
-  return axios.get(`${API_URL}/api/cart`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-};
-
-export const addToCart = async (
-  productId: string,
-  quantity: number,
-  token: string,
-) => {
-  return axios.post(
-    `${API_URL}/api/cart`,
-    { productId, quantity },
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    },
-  );
-};
-
-export const removeFromCart = async (productId: string, token: string) => {
-  return axios.delete(`${API_URL}/api/cart/${productId}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-};
-
-export const clearCart = async (token: string) => {
-  return axios.delete(`${API_URL}/api/cart`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-};
+import {api} from './api';
+import type {CartResponse} from '../types/cart';
+const headers=(token:string)=>({Authorization:'Bearer '+token});
+export const getCart=(token:string)=>api.get<CartResponse>('/api/cart',{headers:headers(token)});
+export const addToCart=(productId:string,quantity:number,token:string)=>api.post<CartResponse>('/api/cart',{productId,quantity},{headers:headers(token)});
+export const incrementQty=(productId:string,token:string)=>api.put<CartResponse>('/api/cart/increment',{productId},{headers:headers(token)});
+export const decrementQty=(productId:string,token:string)=>api.put<CartResponse>('/api/cart/decrement',{productId},{headers:headers(token)});
+export const removeFromCart=(productId:string,token:string)=>api.delete<CartResponse>('/api/cart/'+productId,{headers:headers(token)});
+export const clearCart=(token:string)=>api.delete<CartResponse>('/api/cart',{headers:headers(token)});

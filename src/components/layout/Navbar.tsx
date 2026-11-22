@@ -9,9 +9,9 @@ import { useCart } from "../../hooks/useCart";
 
 const Navbar = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
-  const { cartItems } = useCart();
+  const { cartItems, totalQuantity } = useCart();
   const { token, logout } = useAuth();
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalItems = totalQuantity;
 
   const navigate = useNavigate();
 
